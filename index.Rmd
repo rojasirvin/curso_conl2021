@@ -24,12 +24,12 @@ knitr::opts_chunk$set(echo = FALSE)
 library(metathis)
 meta() %>%
   meta_general(
-    description = "An Introduction to xaringan for Presentations: The Basics and Beyond",
+    description = "Evaluación de impacto",
     generator = "xaringan and remark.js"
   ) %>% 
-  meta_name("github-repo" = "spcanelon/xaringan-basics-and-beyond") %>% 
+  meta_name("github-repo" = "spcanelon/evaluacion-impacto-clear") %>% 
   meta_social(
-    title = "Sharing Your Work with xaringan",
+    title = "Introducción a la evaluación de impacto",
     url = "https://bit.ly/xaringan-nhsr",
     image = "https://repository-images.githubusercontent.com/304962818/38fb4600-20f5-11eb-9597-52659d721631",
     image_alt = paste(
@@ -38,9 +38,9 @@ meta() %>%
       "Workshop presented by Silvia Canelon"
       ),
     og_type = "website",
-    og_author = "Silvia Canelon",
+    og_author = "Irvin Rojas",
     twitter_card_type = "summary_large_image",
-    twitter_creator = "@spcanelon"
+    twitter_creator = "@rojasirvin"
   )
 ```
 
