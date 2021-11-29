@@ -44,26 +44,26 @@ meta() %>%
   )
 ```
 
-# Welcome
+# Bienvenidos
 
-En este sitio encontrarán materiales para las cinco sesiones sobre evaluación de impacto del Diplimado CLEAR - Consejo Nuevo León 2021.
-
-<aside>
-Aquí podemos poner información, figuras, etc.
-</aside>
+En este sitio encontrarán materiales para las cinco sesiones de Introducción a la Evaluación de Impacto, que forman parte del Diplomado en Evaluación organizado por CLEAR - Consejo Nuevo León 2021.
 
 # Diapositivas
 
-Sesión 1.
+[Sesión 1.](https://rojasirvin.github.io/curso_conl2021/slides/intro_evaluacion.html#1) Introducción a la evaluación de impacto
 
-Sesión 2.
+[Sesión 2.](https://rojasirvin.github.io/curso_conl2021/slides/metodos_experimentales.html#1) Métodos experimentales
 
-Sesión 3.
+Sesión 3. Métodos no experimentales
+
+Sesión 4. Aplicaciones de métodos experimentales
+
+Sesión 5. Aplicaciones de métodos no experimentales
 
 
 # Software
 
-Para las sesiones 4 y 5 usaremos R.
+Para las sesiones 4 y 5 usaremos R. [Aquí]((https://rojasirvin.github.io/curso_conl2021/slides/instalacion_r.html#1)) tengo unas diapositivas explicando cómo instalarlo.
 
 # Notas {.appendix}
 
