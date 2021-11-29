@@ -5,7 +5,7 @@ author:
   url: https://www.rojasirvin.com/
   affiliation: CIDE
 description: |
-  Diplomado de Evaluación CLEAR - Consejo Nuevo León 2021
+  Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021
 site: distill::distill_website
 ---
 

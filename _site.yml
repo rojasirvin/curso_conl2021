@@ -1,12 +1,12 @@
 name: "evaluacion-impacto"
 title: "Introducción a la Evaluación de Impacto"
 description: |
-  Diplomado de Evaluación CLEAR - Consejo Nuevo León 2021
+  Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021
 output_dir: "."
 theme: theme.css
 navbar:
   right:
-    - text: "Diplomado de Evaluación CLEAR - Consejo Nuevo León 2021"
+    - text: "Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021"
     - text: "Diapositivas"
       menu:
         - text: "Sesión 1"
