@@ -2,8 +2,8 @@
   "articles": [
     {
       "path": "index.html",
-      "title": "Evaluación de impacto",
-      "description": "Diplomado de evaluación CIDE - Consejo Nuevo León\n",
+      "title": "Introducción a la Evaluación de Impacto",
+      "description": "Diplomado de Evaluación CLEAR - Consejo Nuevo León 2021\n",
       "author": [
         {
           "name": "Irvin Rojas",
@@ -11,7 +11,7 @@
         }
       ],
       "contents": "\r\n\r\nContents\r\nWelcome\r\nDiapositivas\r\nSoftware\r\nNotas\r\n\r\n\r\n\r\n\r\nWelcome\r\nEn este sitio encontrarán materiales para las cinco sesiones sobre evaluación de impacto del Diplimado CLEAR - Consejo Nuevo León 2021.\r\n\r\nAquí podemos poner información, figuras, etc.\r\nDiapositivas\r\nSesión 1.\r\nSesión 2.\r\nSesión 3.\r\nSoftware\r\nPara las sesiones 4 y 5 usaremos R.\r\nNotas\r\nAlgunas notas aquí.\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-11-28T20:09:44-06:00"
+      "last_modified": "2021-11-28T20:14:41-06:00"
     }
   ],
   "collections": []

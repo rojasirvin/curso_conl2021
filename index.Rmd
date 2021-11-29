@@ -1,11 +1,11 @@
 ---
-title: "Evaluación de impacto"
+title: "Introducción a la Evaluación de Impacto"
 author: 
 - name: Irvin Rojas
   url: https://www.rojasirvin.com/
   affiliation: CIDE
 description: |
-  Diplomado de evaluación CIDE - Consejo Nuevo León
+  Diplomado de Evaluación CLEAR - Consejo Nuevo León 2021
 site: distill::distill_website
 ---
 
