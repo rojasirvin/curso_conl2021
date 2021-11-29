@@ -13,6 +13,8 @@ navbar:
           href: "slides/intro_evaluacion.html"
         - text: "Sesión 2"
           href: "slides/metodos_experimentales.html"
+        - text: "Instalación de R"
+          href: "slides/instalacion_r.html"
     - icon: fab fa-github
       href: https://github.com/rojasirvin/curso_conl2021
 creative_commons: CC BY-SA
