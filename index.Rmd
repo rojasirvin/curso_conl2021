@@ -27,7 +27,7 @@ meta() %>%
     description = "Evaluación de impacto",
     generator = "xaringan and remark.js"
   ) %>% 
-  meta_name("github-repo" = "spcanelon/evaluacion-impacto-clear") %>% 
+  meta_name("github-repo" = "rojasirvin/evaluacion-impacto-clear/") %>% 
   meta_social(
     title = "Introducción a la evaluación de impacto",
     url = "https://bit.ly/xaringan-nhsr",
