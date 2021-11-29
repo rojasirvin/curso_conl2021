@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Instalación de R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Irvin Rojas" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cide.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+
+.title[
+# Instalación de R
+]
+
+.subtitle[
+## Evaluación de Impacto
+]
+
+.author[
+### Irvin Rojas &lt;br&gt; [rojasirvin.com](https://www.rojasirvin.com/) &lt;br&gt; [&lt;i class="fab fa-github"&gt;&lt;/i&gt;](https://github.com/rojasirvin) [&lt;i class="fab fa-twitter"&gt;&lt;/i&gt;](https://twitter.com/RojasIrvin) [&lt;i class="ai ai-google-scholar"&gt;&lt;/i&gt;](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&amp;hl=en)
+]
+
+---
+
+class: center, middle, inverse
+
+# R desde cero
+
+---
+
+# ¿Qué es R?
+
+R es un lenguaje y un entorno de cómputo para estadística
+
+Es un **lenguaje**: le decimos a la computadora que haga tareas específicas
+
+- Calcule la media de un conjunto de datos
+
+- Haga un histograma de un conjunto de datos
+
+- Corra una regresión lineal (estime la pendiente y de una línea de regresión y su error estándar asociado)
+
+--
+
+Tenemos que aprender cómo *hablarle* a la computadora
+
+A diferencia de otros lenguajes, que se usan para muchas cosas, R se enfoca en estadística
+
+---
+
+# ¿Qué más debo saber?
+
+Pueden ver algo de la historia de R en su entrada [en Wikipedia](https://es.wikipedia.org/wiki/R_(lenguaje_de_programaci%C3%B3n))
+
+--
+
+Piensen en para qué les sirve aprender *lenguajes*
+
+Van a comunicarse
+
+- Pedir ejecutar tareas
+
+- Con sus colegas
+
+- Con su *yo* del futuro
+
+--
+
+Tenemos que tener unas reglas básicas comúnes
+
+
+---
+
+# Instalación de R
+
+Comenzaremos desde la instalación
+
+Den click [acá](http://www.est.colpos.mx/R-mirror/) y eligan la versión para Windows o Mac
+
+Hay que ejecutar el archivo .exe (o .pkg, en el caso de los usuarios de Mac)
+
+Seleccionen un directorio y las opciones preestablecidas para instalar el programa en sus computadoras
+
+
+---
+
+# ¿Qué es RStudio?
+
+RStudio es un entorno de desarrollo integrado (IDE, en inglés)
+
+Nos permite trabajar de forma más amigable con R
+
+Nos permite editar código con herramientas que facilitan las tareas
+
+Nos permite administrar proyectos
+
+--
+
+Imaginen que quieren hacer su tesis en WordPad
+
+Podemos hacer una analogía con la relación que hay entre WordPad y Word, por un lado, y R y RStudio por el otro
+
+---
+
+# Instalación de RStudio
+
+Descarguen el programa de [acá](https://rstudio.com/products/rstudio/download/)
+
+Ubiquen la versión apropiada (hasta arriba encontrarán la de Windows)
+
+Seleccionen un directorio y las opciones por defecto
+
+--
+
+Con esto estamos listos para comenzar a trabajar
+
+---
+
+class: inverse, middle, center
+
+# El ambiente
+
+---
+
+# R por primera vez
+
+Si buscan en su lista de programas, encontrarán R, solito
+
+Podemos hacer ahí algunas cosas, pero en realidad nunca vamos a trabajar con R por sí solo en este curso
+
+--
+
+Vayamos directo a RStudio
+
+---
+
+# Interfaz de RStudio
+
+Esencialmente tenemos cinco partes principales
+
+1. El editor (izquierda, arriba)
+
+1. La consola (izquierda, abajo)
+
+1. El entorno (derecha, arriba)
+
+1. Las herramientas (derecha abajo)
+
+1. La barra de menús y tareas
+
+---
+
+# El editor
+
+En el editor escribimos comandos, es decir, instrucciones
+
+A una serie de instrucciones guardadas en un archivo le llamamos *script*
+
+Cuando alguien dice *un script de R* se refiere a un archivo que contiene una colección de instrucciones
+
+Si escribimos lo siguiente en el editor, no pasa nada
+
+
+```r
+1+2
+```
+
+También podemos dar la instrucción de que genere un *objeto* que se llame *cosa*
+
+
+```r
+cosa &lt;- 1+2
+```
+
+Pero hasta ahora, estas solo son instrucciones
+---
+
+# La consola
+
+La consola interpreta nuestras instrucciones y realiza una tarea
+
+Intenten escribir de nuevo
+
+```r
+1+2
+```
+
+Ahora pidan crear de nuevo el objeto llamado *cosa*
+
+
+```r
+cosa &lt;- 1+2
+```
+
+Ahora escriban simplemente *cosa* en la consola
+
+--
+
+El punto es, podríamos hacer todo desde la consola, pero sería impráctico
+
+En estadística y econometría frecuentemente hacemos cientos o miles de tareas para generar un resultado
+
+Los scripts nos permiten coleccionar instrucciones en vez de ponerlas una a una en la consola
+
+---
+
+# Las otras tres partes
+
+En el entorno podremos ver objetos cargados o creados
+
+--
+
+En las utilidades veremos principalmente los paquetes usados, el directorio de trabajo y las gráficas que generemos
+
+--
+
+La barra de herramientas nos permite hacer cosas sencillas como copiar y pegar, modificar la vista de la interfaz y controlar las opciones generales
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

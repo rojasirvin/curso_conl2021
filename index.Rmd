@@ -1,0 +1,70 @@
+---
+title: "Evaluación de impacto"
+author: 
+- name: Irvin Rojas
+  url: https://www.rojasirvin.com/
+  affiliation: CIDE
+description: |
+  Diplomado de evaluación CIDE - Consejo Nuevo León
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+```
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "An Introduction to xaringan for Presentations: The Basics and Beyond",
+    generator = "xaringan and remark.js"
+  ) %>% 
+  meta_name("github-repo" = "spcanelon/xaringan-basics-and-beyond") %>% 
+  meta_social(
+    title = "Sharing Your Work with xaringan",
+    url = "https://bit.ly/xaringan-nhsr",
+    image = "https://repository-images.githubusercontent.com/304962818/38fb4600-20f5-11eb-9597-52659d721631",
+    image_alt = paste(
+      "Title slide of Sharing Your Work with xaringan:",
+      "An Introduction to xaringan for Presentations: The Basics and Beyond",
+      "Workshop presented by Silvia Canelon"
+      ),
+    og_type = "website",
+    og_author = "Silvia Canelon",
+    twitter_card_type = "summary_large_image",
+    twitter_creator = "@spcanelon"
+  )
+```
+
+# Welcome
+
+En este sitio encontrarán materiales para las cinco sesiones sobre evaluación de impacto del Diplimado CLEAR - Consejo Nuevo León 2021.
+
+<aside>
+Aquí podemos poner información, figuras, etc.
+</aside>
+
+# Diapositivas
+
+Sesión 1.
+
+Sesión 2.
+
+Sesión 3.
+
+
+# Software
+
+Para las sesiones 4 y 5 usaremos R.
+
+# Notas {.appendix}
+
+Algunas notas aquí.

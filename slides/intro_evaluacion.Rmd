@@ -1,0 +1,707 @@
+---
+title: "Introducción a la evaluación de impacto"
+author: "Irvin Rojas"
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes, shadows,arrows}
+output:
+  xaringan::moon_reader:
+    css: [default, "libs/cide.css", metropolis-fonts, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css", "https://use.fontawesome.com/releases/v5.7.2/css/all.css", "https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css"]
+    seal: false
+    chakra: "https://remarkjs.com/downloads/remark-latest.min.js"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: ["middle", "center"]
+      ratio: "16:9"
+      beforeInit: ["https://platform.twitter.com/widgets.js", "libs/cols_macro.js"]
+      navigation:
+        scroll: false
+---
+
+class: title-slide
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.path = "figures/")
+library(tidyverse)
+library(magick)
+library(reticulate)
+library(kableExtra)
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+.title[
+# Introducción a la evaluación de impacto
+]
+
+.subtitle[
+## Evaluación de Impacto
+]
+
+.author[
+### Irvin Rojas <br> [rojasirvin.com](https://www.rojasirvin.com/) <br> [<i class="fab fa-github"></i>](https://github.com/rojasirvin) [<i class="fab fa-twitter"></i>](https://twitter.com/RojasIrvin) [<i class="ai ai-google-scholar"></i>](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&hl=en)
+]
+
+---
+
+# Agenda
+
+1. Presentación mía y de ustedes
+
+1. Descripción general de las próximas cinco sesiones
+
+1. Introducción a la evaluación de impacto
+
+---
+
+# Objetivo del curso
+
+Revisar conceptos básicos de estadística y econometría e implementar estas ideas usando datos en R
+
+Este curso complementa los cursos de estadística y econometría básicos e intermedios con herramientas de programación en R
+
+--
+
+Dotar a los alumnos de herramientas suficientes para tomar cursos de econometría avanzados
+
+... para comprender literatura económica especializada
+
+... para poder llevar a cabo proyectos de investigación económica que culminen con una tesis de nivel licenciatura.
+
+---
+
+# Formato del curso
+
+5 sesiones teórico-prácticas
+
+Cada sesión tiene una duración de 180 minutos
+
+  - 120 minutos de clase
+  - 60 minutos de discusión
+
+Cada sesión será autocontenida e incluirá elementos conceptuales de estadística y econometría, ejemplos aplicados en R y ejercicios para su ejecución en tiempo real
+
+---
+
+# Participación
+
+A lo largo del curso pondré varios ejercicios que iremos resolviendo sobre la marcha
+
+Pregunten si tienen alguna duda
+
+Las sesiones en línea pueden ser muy aburridas si solo el profesor se la pasa hablando durante tres horas
+
+---
+
+# Programa
+
+
+```{r table.programa, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+
+clase <- c("Introducción a la evaluación de impacto",
+           "Evaluación con métodos experimentales",
+           "Evaluación con métodos no experimentales",
+           "Aplicaciones de métodos experimentales",
+           "Aplicaciones de métodos no experimentales")
+
+fecha <- c("Martes 30 de noviembre",
+           "Viernes 3 de diciembre",
+           "Lunes 6 de diciembre",
+           "Miércoles 8 de diciembre",
+           "Viernes 10 de diciembre")
+
+table.programa <- data.frame(cbind(clase, fecha))
+colnames(table.programa) = c("Clase","Fecha")
+
+table.programa %>%
+  kbl(align = "lc",
+      escape = FALSE,
+      full_width = FALSE) %>%
+  kable_paper(c("hover", "condensed", "responsive")) %>% 
+  add_header_above(c("Programa de clases" = 2 ),
+                   bold = TRUE,
+                   background = "white")
+```
+
+
+---
+
+class: inverse, middle, center
+
+# Introducción a la evaluación de impacto
+
+---
+
+# Evaluación de impacto
+
+- Este curso está enfocado en métodos para identificar relaciones causales
+
+- Entre ellas están las relaciones que surgen por la implementación deliberada de programas públicos
+
+- Pero no nos limitamos a este tipo de acciones: nos interesa comprender la teoría y la práctica para dar respuesta a relaciones que surgen
+
+  - De la legislación nacional o subnacional
+  
+  - De fenómenos naturales
+  
+  - Del funcionamiento de los mercados y las instituciones
+
+- En el curso enfatizaremos lo siguiente:
+
+  1. La importancia de las preguntas
+  2. El diseño para responder dichas preguntas
+  3. Las técnicas apropiadas para implementar el diseño
+  
+---
+
+class: inverse, middle, center
+
+# 1. La importancia de las preguntas
+
+---
+
+# Las preguntas
+
+Podemos estimar relaciones causales casi de cualquier cosa
+
+Pero no todas las relaciones causales son de interés
+
+Y muchas cosas que son de interés son difíciles de estudiar desde el punto de vista de las relaciones causales
+
+Ustedes como evaluadores tienen una gran responsabilidad
+
+¿Qué evaluaciones consideran que son pertinentes hoy a nivel federal, estatal o municipal?
+
+
+---
+
+# La importancia de la teoría
+
+En este curso enfatizacermos la evaluación relacionada a la respuesta de una relación teórica
+
+Para los economistas, los datos no *hablan* solos
+
+La teoría es necesaria para establecer la relación entre $x$ y $y$
+
+Tenemos la fortuna de disponer cada vez de mejores datos
+
+Mejores datos nos permiten probar mejor modelos cada vez más ricos
+
+---
+
+# Series de tiempo vs microeconometría
+
+Teoría económica usaba modelos y deducía de ellos los efectos de cambios de polítca
+
+O usaba series de tiempo agregadas que trataban de ser ligadas a modelos con consumidores o empresas representativas
+
+Cosas que han cambiado:
+
+  - Disponibilidad de microdatos
+  - Demanda por probar empíricamente modelos más ricos
+  - Capacidad de cómputo
+
+De hecho, algunos macroeconomistas están volteando a ver los métodos de la microeconomía aplicada:
+
+  - Estudios de evento
+  - Controles sintéticos
+
+---
+
+# Tipos de problemas de evaluación
+
+1. *Efectos de tratamiento*
+
+  - ¿Cuál es el efecto de $T$ sobre los participantes o no participantes de cierta política?
+  
+  - ¿Funciona un determinado programa?
+  
+  - Se requieren condiciones débiles
+  
+  - No es fácil extrapolar las conclusiones a otros contextos
+
+--
+
+1. *Estimación estructural*
+
+  - ¿Cuál es el efecto potencial de un nuevo $T$ en una población?
+  
+  - Problema parecido a determinar la demanda de un bien recién introducido al mercado
+  
+  - Se imponen condiciones fuertes
+  
+  - Se trata de estimar una serie de parámetros que caracterizan las preferencias y tecnología de individuos, hogares y empresas
+
+---
+
+# Ejemplo: impuestos
+
+- Consideremos el cambio en la tasa del impuesto al ingreso $t$
+
+- La oferta es función del salario $W$, de características observadas $X$ y de inobservables $U$  $H=\phi(W,X,U)$
+
+- La pregunta de evaluación es encontrar la magnitud de $\phi(W(1-t'),X,U)-\phi(W(1-t),X,U)$ para cada individuo
+
+--
+
+- Tenemos tres posibles tipos de evaluaciones, dependiendo del tipo de impuesto y dónde se va a implementar:
+
+  1. Un impuesto que ya ha existido antes en una población y queremos saber su efecto en la misma población, caracterizada por su distribución de $(W,X,U)$
+  
+  2. El impuesto ha existido antes, pero queremos conocer su efecto en una población distinta, con una distribución distinta de $(W,X,U)$
+  
+  3. El impuesto nunca ha sido implementado y queremos predecir su efecto en la población usada para estimar la oferta laboral o en otra población
+
+---
+
+# Caso 1. Un impuesto ya conocido en la misma población
+
+- Supongamos que la población ha vivido distintos regímenes de impuestos $t_j$, con $j=1,\ldots, J$ y tenemos datos sobre la oferta laboral bajo estos regímenes
+
+- Este es un problema relativamente simple pues tenemos los datos para calcular la oferta laboral esperada para cada impuesto:
+
+$$E(H|W,X,t)=\int\phi(W(1-t_j),X,U)dG(U|X,W)$$
+- No necesitamos un contrafactual pues podemos esperar que lo ocurrido antes aplique para el futuro si $\phi(\cdot)$ y $G(\cdot)$ no cambiaron
+
+
+---
+
+# Caso 2. Decir algo sobre una política en un nuevo contexto
+
+- Problema mucho más complicado
+
+- Debemos estimar $\phi'(\cdot)$ y $G'(\cdot)$ en el nuevo ambiente, o tratar determinar la relación entre $\phi$ y $\phi'$ y entre $G$ y $G'$
+
+--
+
+> "La existencia de un problema radica en que el futuro es distinto que el pasado, mientras que la posibilidad de una solución depende de que el futuro se parezca al pasado."
+>
+> --- Kinight (1921)
+
+--
+
+- Este es el tipo de problemas en donde la estimación estructural es de gran valor
+
+---
+
+# Caso 3. Mucho más complicado
+
+- ¿Qué pasa si nunca ha existido un impuesto similar en el país de interés?
+
+- ¿Podemos identificar el efecto del impuesto a partir de variaciones en el salario?
+
+- Solo si asumimos que el efecto del impuesto actúa vía el salario
+
+---
+
+class: inverse, middle, center
+
+# 2. El diseño para responder las preguntas
+
+---
+
+# Causalidad y evaluación de políticas
+
+- Los diseños experimentales han puesto pie firme como el *gold standard* para la evaluación de políticas
+
+- Los investigadores pelean por fondos de gobiernos, ONGs y *think tanks* para evaluar políticas realizando asignaciones experimentales de tratamientos
+
+- Esther Duflo, Michael Kremer y Abhijit Banerjee ganaron el Nobel de Economía en 2019 por sus contribuciones a la lucha contra la pobreza, donde los experimentos tienen un papel primordial
+
+- El modelo de causal de Rubin o de *resultados potenciales* permite conceptualizar la mayoría de los problemas de evaluación pensando en qué *resultado* obtendría una unidad con y sin intervención
+
+- Sin embargo, el **problema fundamental de la inferencia causal** implica que solo podemos observar a cada unidad en uno de los estados posibles
+
+---
+
+# Sesgo de selección
+
+- En la práctica tenemos que comparar entre unidades que han recibido y que no han recibido el tratamiento
+
+- Esto da original al *sesgo de selección*, es decir, a la existencia de factores que afectan tanto la asignación del tratamiento como del resultado mismo
+
+- Veremos cómo la experimentación resuelve el sesgo de selección
+
+--
+
+- Pero también estudiaremos una amplia literatura que recae en una serie de supuestos bajo los cuales la asignación del tratamiento aproxima a una asignación aleatoria
+
+- Esta literatura incluye métodos muy estudiados como las técnicas de *matching* y el uso de variables instrumentales
+
+
+---
+
+class: inverse, middle, center
+
+# ¿Por qué evaluar?
+
+
+---
+
+# ¿Por qué evaluar?
+
+- Probar teoría económica
+
+- Explicar las características de los abundantes datos microeconómicos
+
+- Desde la perspectiva de políticas públicas
+
+  - Rendición de cuentas
+  
+  - Estimación de relaciones costo-beneficio
+  
+  - Replicabilidad
+  
+  - Competencia por fondos
+  
+--
+
+- Queremos evidencia más allá de las anécdotas
+
+- Una evaluación responde a la pregunta de *qué parte de un cambio $\Delta y$ en una variable de interés se puede atribuir a un programa $T$*
+
+---
+
+# Programas implementados de forma deliberada
+
+- Gobiernos en todos los niveles implementan programas públicos con distintos objetivos:
+
+  - Salud
+  
+  - Educación
+  
+  - Empleo
+  
+  - Mejoras urbanas
+
+- Siempre encontrarán referencias al extinto *PROGRESA* - *OPORTUNIDADES* - *PROSPERA* que fue parte fundamental del diseño de intervenciones diseñadas para ser evaluadas
+
+- ¿Qué saben de este programa?
+
+---
+
+# Impacto de otro tipo de cambios exógenos
+
+- Lo que aprenderemos puede aplicarse a otras preguntas causales
+
+  - El impacto de la aparición en la primera página de una boleta en la probabilidad de ser electo
+  
+  - El impacto del cambio de legislación relativa al divorcio o al aborto
+  
+  - El efecto de cambios geopolíticos, como la reunificación de Alemania
+  
+  - El impacto del cambio climático en la productividad
+  
+--
+
+- En todas estas preguntas estamos pensando en la idea de **causalidad**
+
+- Lo que queremos conocer es qué le hubiera pasado a la población que recibió la intervención de no haberla recibido: el **contrafactual**
+
+---
+
+class: inverse, middle, center
+
+# Un ejemplo para motivar la importancia de la causalidad
+
+---
+
+# La epidemia de cólera de Londres
+
+<br>
+.center[
+<iframe width="800" height="450" src="https://www.youtube.com/embed/ETiQszmleWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+]
+
+
+
+---
+
+# La epidemia de cólera en Londres
+
+- En aquellos tiempos (1854) se creía que el cólera se transmitía por medio del *miasma* en el aire
+
+- Snow conjeturaba que la causa era un organismo vivo que se introducía en el cuerpo
+
+- Siguió una estrategia que podemos imitar:
+
+--
+
+  1. Localizar el primer caso
+  
+  1. Rastrear al segundo y notar que ocupó el mismo espacio que el primero
+  
+  1. Notar las diferencias en la limpieza entre los hogares infectados y los adyacentes
+  
+  1. Creó un mapa para rastrear a los infectados
+  
+  1. Notó que los infectados eran atendidos por la ciertas compañías de agua
+  
+  1. Experimentó cortando el suministro de compañías sospechosas
+  
+---
+
+# Para los que aman los mapas
+.pull-left[
+
+```{r, out.width="90%", fig.align='center', fig.cap='Fuente: Smithsonian Magazine'}
+knitr::include_graphics("https://thumbs-prod.si-cdn.com/trC5qb_ILIffjzsnX3kEbvscwM0=/fit-in/1072x0/https://public-media.si-cdn.com/filer/20110520102403643px-Snow-cholera-map-1-300x279.jpg")
+```
+]
+
+
+.pull-right[
+<iframe width='100%' height='450' frameborder='0' src='https://simonrogers.carto.com/tables/john_snow/embed_map?title=false&description=false&search=true&shareable=true&cartodb_logo=true&sql=SELECT%20*%20FROM%20john_snow%20ORDER%20BY%20num_deaths%2C%20geom_type%20ASC&sw_lat=51.51177397755052&sw_lon=-0.1421356201171875&ne_lat=51.51477858782044&ne_lon=-0.1318359375' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+]
+
+- Acá les dejo una nota en [The Guardian](https://www.theguardian.com/news/datablog/2013/mar/15/john-snow-cholera-map) sobre los mapas para hacer periodismo
+
+---
+
+# El problema era el agua
+
+
+.pull-left[
+- La Tabla 1 nos muestra la idea básica de su **diseño**
+
+- Es como si hubiera habido un experimento: casas comparativamente iguales recibían agua de distintas compañías
+
+- Podemos notar las diferencias en el número de muertes por compañía
+
+- Muchas veces no necesitaremos cosas más complicadas que esto
+
+- A partir de estos hallazgos se propusieron algunas políticas que eran consistentes con la hipótesis de transmisión
+
+- En muchos sentidos Snow hizo un trabajo de detective
+]
+
+.pull-right[
+
+
+```{r table.snow, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+
+ciudad <- c("Southwark y Vauxhall", "Lambeth", "Resto de Londres")
+hogares <- c("40,046","26,107","256,423")
+muertes <- c("1,263","98","1,422")
+muertes10mil <- c("315","37","59")
+
+table.snow <- data.frame(cbind(ciudad, hogares, muertes, muertes10mil))
+
+colnames(table.snow) = c("Ciudad","Hogares","Muertes por cólera", "Muertes / 10 mil hogares")
+
+table.snow %>%
+  kbl(align = "lccc") %>%
+  kable_paper(c("hover", "condensed", "responsive")) %>%
+  add_header_above(c("Tabla XI de Snow" = 4 ),
+                   bold = TRUE,
+                   background = "white") %>% 
+  footnote(general = "Reproducida por Freedman (1991).",
+           general_title = "Nota:",
+           footnote_as_chunk = T)
+```
+
+]
+
+
+---
+
+class: inverse, middle, center
+
+# Efectos causales
+
+---
+
+# Efecto causal
+
+- Pensemos en un tratamiento binario
+
+$$T_i=\begin{cases}
+1 \quad\text{tratado} \\
+0 \quad\text{no tratado}
+\end{cases}$$
+
+- El resultado que cada individuo tendría bajo cada régimen de tratamiento:
+  - $y_{1i}$ con $T_i=1$
+  
+  - $y_{0i}$ con $T_i=0$
+
+
+- Supongamos que el tratamiento es recibir un trasplante y el resultado es morir (1) o seguir vivo (0) cinco días después de recibirlo (Hernan & Robins, 2018)
+
+  - Supongamos que Zeus recibió el trasplante y a los cinco días había fallecido
+  
+  - Por otro lado, Hena no recibió el trasplante y a los cinco días seguía viva
+  
+--
+  
+- No tardarían nuestros columnistas en decir que hay que prohibir los trasplantes
+
+
+---
+
+# Efecto causal
+  
+- Supongamos también que podemos conocer que:
+  
+$$y_{Zeus}=\begin{cases}
+y_{1,Zeus}=1\\
+y_{0,Zeuz}=0
+\end{cases}$$
+
+es decir, si no hubiera recibo el trasplante, estaría vivo cinco días después
+
+- Similarmente, conocemos que:
+
+$$y_{Hena}=\begin{cases}
+y_{1,Hena}=0\\
+y_{0,Hena}=0
+\end{cases}$$
+
+- **Efecto causal para un individuo**: el tratamiento tiene un efecto causal para $i$ si $y_{1i}\neq y_{0i}$
+  
+- En nuestro ejemplo, el tratamiento tuvo un efecto causal en Zeus, pero no en Hena
+
+---
+
+# Resultados potenciales
+
+- $y_{1i}$ y $y_{0i}$ se conocen como resultados potenciales o contrafactuales
+
+- El término *potencial* se debe a que solo vemos uno de ellos
+
+- En nuestro ejemplo, solo observamos que $y_{0,Zeus}=y_{1,Zeus}=1$
+
+- En general, el efecto causal para un individuo no puede ser identificado
+
+---
+
+# Efectos causales promedio
+
+- Supongamos que podemos estudiar a la familia de Zeus, $N=20$
+
+```{r table.personas, echo=FALSE, message=FALSE, warnings=FALSE}
+
+personaid <- c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20")
+y0 <- c(0,1,0,0,0,1,0,0,1,1,0,1,1,0,0,0,1,1,1,1)
+y1 <- c(1,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,0,0,0)
+
+table.personas <- data.frame(cbind(personaid, y0,y1))
+
+colnames(table.personas) = c("Persona","y0","y1")
+
+table.personas %>%
+  kbl(align = "lcc",
+      escape = FALSE,
+      full_width = FALSE) %>%
+  kable_paper(c("hover", "condensed", "responsive")) %>% 
+  add_header_above(c("Efectos individuales" = 3 ),
+                   bold = TRUE,
+                   background = "white") %>% 
+    scroll_box(height = "70%")
+
+```
+
+---
+
+# Efectos causales promedio
+
+- De la tabla podemos concluir que $P(y_{1i}=1)=10/20=0.5$, es decir, la mitad de quienes reciben el trasplante morirían después de cinco días
+
+- Y también observamos que $P(y_{0i}=1)=0.5$, es decir, que la probabilidad de morir de no haber recibido el tratamiento es también de 0.5
+
+--
+
+- En el anterior ejemplo, el tratamiento no tiene un efecto causal pues la probabilidad de morir con y sin el tratamiento es igual
+
+- **Efecto causal promedio** en una población: un efecto causal promedio de $T$ en el resultado $y$ está presente si $P(Y_{1i}=1\neq Y_{0i}=1)$ en la población de interés
+
+- Cuando pensamos en **poblaciones**, podemos usar expectativas para definir el efecto causal promedio: $E(Y_{1i}\neq Y_{0i})$, lo cual permite generalizar a resultados no binarios
+
+- La ausencia de efectos individuales promedio no implica ausencia de efectos individuales
+
+--
+
+- Cuando no hay efecto causal individual para ningún individuo, $y_{0i}=y_{1i}$, para todo $i$, decimos que la hipótesis **estricta** (*sharp*) de efecto de tratamiento nulo es verdadera
+
+---
+
+# Variabilidad aleatoria
+
+- En la práctica, casi nunca podemos observar a la población de interés, sino solo a una muestra
+
+- Por tanto, $P(y_{ti}=y)$ no puede ser observada sino estimada
+
+- Debido al error muestral, la proporción que muere en la muestra no es numéricamente igual a la proporción que muere en la población
+
+--
+
+- La hipótesis que queremos probar es que hay un efecto causal en la población
+
+- Pero al trabajar con muestras, puede haber diferencias que surjan solo por el muestreo
+
+- Nuestra tarea es distinguir estas diferencias de los verdaderos efectos causales
+
+---
+
+class: inverse, middle, center
+
+# Actividad: identificar errores en afirmaciones causales
+
+---
+
+# Identificar errores en afirmaciones causales
+
+Nos organizaremos en equipos de XX personas
+
+Cada equipo tendrá a la mano una breve nota que implícitamente hace una afirmación causal
+
+Cada equipo deberá discutir y luego presentarnos lo siguiente
+
+- ¿Cuáles son las variables importantes en el texto?
+
+- ¿Cuál es la relación causal que implícitamente se ubica en el texto?
+
+- ¿Qué podría invalidar la causalidad en las relaciones que se afirman?
+
+
+---
+
+class: inverse, middle, center
+
+# Objetivos del curso
+
+---
+
+# Espero que al final del curso puedan
+
+- Identificar relaciones causales
+
+- Proponer estrategias para evaluar
+
+- Usar datos y programar sus estrategias empíricas
+
+- Identificar literatura relevante, huecos en ella y avenidas para investigación futura
+
+- Argumentar y presentar ideas de forma oral y escrita
+
+---
+
+# Próxima sesión
+
+Hablaremos sobre métodos experimentales para identificar relaciones causales
+
+En la sesión 3 usaremos R, les recomiendo que lo vayan instalando y que, si tienen algún problema al hacerlo, me consulten
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**

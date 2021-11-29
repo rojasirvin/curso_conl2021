@@ -1,0 +1,23 @@
+name: "evaluacion-impacto"
+title: "Evaluación de impacto"
+description: |
+  Diplomado de evaluación CLEAR - Consejo Nuevo León 2021
+output_dir: "."
+theme: theme.css
+navbar:
+  right:
+    - text: "Aquí un título"
+    - text: "Diapositivas"
+      menu:
+        - text: "Sesión 1"
+          href: "slides/intro_evaluacion.html"
+        - text: "Sesión 2"
+          href: "slides/metodos_experimentales.html"
+    - icon: fab fa-github
+      href: https://github.com/rojasirvin/curso_conl2021
+creative_commons: CC BY-SA
+repository_url: https://github.com/rojasirvin/curso_conl2021
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
