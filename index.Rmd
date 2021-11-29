@@ -63,7 +63,7 @@ Sesión 5. Aplicaciones de métodos no experimentales
 
 # Software
 
-Para las sesiones 4 y 5 usaremos R. [Aquí]((https://rojasirvin.github.io/curso_conl2021/slides/instalacion_r.html#1)) tengo unas diapositivas explicando cómo instalarlo.
+Para las sesiones 4 y 5 usaremos R. [Aquí](https://rojasirvin.github.io/curso_conl2021/slides/instalacion_r.html#1) tengo unas diapositivas explicando cómo instalarlo.
 
 # Notas {.appendix}
 

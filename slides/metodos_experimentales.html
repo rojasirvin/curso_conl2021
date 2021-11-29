@@ -58,9 +58,9 @@ class: inverse, middle, center
 
 # El efecto de los hospitales
 
-- ¿Los hospitales hacen que la gente sea más sana?
+¿Los hospitales hacen que la gente sea más sana?
 
-- Podemos conseguir datos de encuestas sobre cuántas veces las personas han ido al hospital en el último año
+Podemos conseguir datos de encuestas sobre cuántas veces las personas han ido al hospital en el último año
 
 
 &lt;table class=" lightable-paper lightable-hover" style='font-family: "Arial Narrow", arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;'&gt;
@@ -101,9 +101,9 @@ class: inverse, middle, center
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- ¿Tiene sentido afirmar que los hospitales enferman?
+¿Tiene sentido afirmar que los hospitales enferman?
 
-- ¿Qué sucede?
+¿Qué sucede?
 
 
 
@@ -111,7 +111,7 @@ class: inverse, middle, center
 
 # Comparaciones observacionales
 
-- Pensemos de nuevo en términos del *Modelo de Rubin* de resultados potenciales
+Pensemos de nuevo en términos del *Modelo de Rubin* de resultados potenciales
 
 `$$y_{i}=\begin{cases}
 y_{1i}=1\quad\text{si }D_i=1\\
@@ -119,11 +119,11 @@ y_{0i}=0 \quad \text{si } D_i=0
 \end{cases}$$`
 
 
-- Solo vemos al individuo en una situación, `\(y_i\)`:
+Solo vemos al individuo en una situación, `\(y_i\)`:
 
 `$$y_i=y_{0i}+(y_{1i}-y_{0i})D_i$$`
 
-- Esta notación nos indica de manera compacta qué situación del resultado contrafactual obsvervamos, dependiendo de si recibe o no el tratamiento
+Esta notación nos indica de manera compacta qué situación del resultado contrafactual obsvervamos, dependiendo de si recibe o no el tratamiento
 
   - `\(y_i\)` es lo que vemos
   - Si `\(D_i=1\)`, nos queda `\(y_i=y_{0i}+(y_{1i}-y_{0i})1=y_{1i}\)`
@@ -136,11 +136,12 @@ y_{0i}=0 \quad \text{si } D_i=0
 # Comparaciones observacionales
 
 
-- ¿Qué nos dicen las comparaciones observacionales?
 
-- Supongamos que tenemos acceso a datos sobre tratados y no tratados
+¿Qué nos dicen las comparaciones observacionales?
 
-- Podemos calcular `\(E(y_i|D_i=1)-E(y_i|D_i=0)\)`:
+Supongamos que tenemos acceso a datos sobre tratados y no tratados
+
+Podemos calcular `\(E(y_i|D_i=1)-E(y_i|D_i=0)\)`:
 
 $$
 `\begin{aligned}
@@ -151,8 +152,7 @@ $$
 
 # Sesgo de selección
 
-
-- Reordenando:
+Reordenando:
 
 $$
 `\begin{aligned}
@@ -160,31 +160,31 @@ E(y_i|D_i=1)-E(y_i|D_i=0)=&amp;\overbrace{ E(y_{1i}|D_i=1)-E(y_{0i}|D_i=1)}^{\te
 \end{aligned}`
 $$
 
-- El primer término nos da la diferencia promedio en la variable de salud entre los hospitalizados y lo que les hubiera pasado si no hubieran sido hospitalizados
+El primer término nos da la diferencia promedio en la variable de salud entre los hospitalizados y lo que les hubiera pasado si no hubieran sido hospitalizados
 
-- En nuestro ejemplo, el **sesgo de selección** es la diferencia en salud entre los hospitalizados y los no hospitalizados
+En nuestro ejemplo, el **sesgo de selección** es la diferencia en salud entre los hospitalizados y los no hospitalizados
 
-- Específicamente, si quienes van al hospital tienen una peor salud, podemos esperar que `\(E(y_{0i}|D_i=1)-E(y_{oi}|D_i=0)&lt;0\)`
+Específicamente, si quienes van al hospital tienen una peor salud, podemos esperar que `\(E(y_{0i}|D_i=1)-E(y_{oi}|D_i=0)&lt;0\)`
 
 ---
 
 # Sesgo de selección
 
-- Al hacer aseveraciones basadas en comparaciones observacionales se incluye el efecto causal del tratamiento, pero también el sesgo de selección
+Al hacer aseveraciones basadas en comparaciones observacionales se incluye el efecto causal del tratamiento, pero también el sesgo de selección
 
-- El sesgo de selección puede ser positivo o negativo
+El sesgo de selección puede ser positivo o negativo
 
-- El objetivo de las estrategias de evaluación es eliminar el sesgo de selección
+El objetivo de las estrategias de evaluación es eliminar el sesgo de selección
 
 ---
 
 # Tratamiento aleatorio
 
-- Supongamos que tenemos la posibilidad de aleatorizar el tratamiento, es decir, hacer que `\(Y_i\)` y `\(D_i\)` sean independientes
+Supongamos que tenemos la posibilidad de aleatorizar el tratamiento, es decir, hacer que `\(Y_i\)` y `\(D_i\)` sean independientes
 
-- En ese caso, por independencia: `\(E(Y_{0i}|D_i=0)=E(Y_{0i}|D_i=1)\)`
+En ese caso, por independencia: `\(E(Y_{0i}|D_i=0)=E(Y_{0i}|D_i=1)\)`
 
-- De la definición de comparación observacional:
+De la definición de comparación observacional:
 
 $$
 `\begin{aligned}
@@ -192,7 +192,7 @@ E(y_i|D_i=1)-E(y_i|D_i=0)=&amp;E(y_{1i}|D_i=1)-E(y_{0i}|D_i=0)
 \end{aligned}`
 $$
 
-- Sustituyendo el resultado de independencia:
+Sustituyendo el resultado de independencia:
 
 $$
 `\begin{aligned}
@@ -206,40 +206,34 @@ $$
 
 # No siempre es factible
 
-- La aleatorización resuelve muchas cosas, pero muchas veces no es factible
+La aleatorización resuelve muchas cosas, pero muchas veces no es factible
 
-- ¿Qué tendríamos que hacer en el caso de estudio, "¿Los hospitales matan?"
+¿Qué tendríamos que hacer en el caso de estudio, "¿Los hospitales matan?"
 
---
+Pensemos en un programa de empleo para ex convictos
 
-- Pensemos en un programa de empleo para ex convictos
+Seguramente una comparación observacional indicaría que estos ganan menos que el resto de la población
 
-- Seguramente una comparación observacional indicaría que estos ganan menos que el resto de la población
+Pero esto no significa que el programa cause un efecto negativo en el ingreso
 
-- Pero esto no significa que el programa cause un efecto negativo en el ingreso
-
-- Siempre tenemos que pensar en el contrafactual
+Siempre tenemos que pensar en el contrafactual
 
 ---
 
 # El experimento STAR
 
-- ¿En qué consistió?
+¿En qué consistió?
 
---
-
-- Dos tipos de tratamiento:
+Dos tipos de tratamiento:
 
   - `\(T_1\)`: clase pequeña (13-17) con maestro de tiempo completo
   - `\(T_2\)`: tamaño normal pero con asistente para el maestro
-  
-- Un grupo `\(C\)` al que no se le hizo cambio alguno (22.3 alumnos en promedio)
 
---
+Un grupo `\(C\)` al que no se le hizo cambio alguno (22.3 alumnos en promedio)
 
-- ¿Cuál es el efecto de tener clases más pequeñas?
+¿Cuál es el efecto de tener clases más pequeñas?
 
-- ¿Por qué esto sería relevante? ¿Qué implicaciones de política tendría?
+¿Por qué esto sería relevante? ¿Qué implicaciones de política tendría?
 
 ---
 
@@ -247,15 +241,15 @@ $$
 
 .pull-left[
 
-- ¿Qué vemos en la Tabla 2.2.1 de MHE
+La siguiente tabla reproduce los resultados de esta intervención
 
-- ¿Qué nos indican los valores `\(p\)`?
+¿Qué nos indican los valores `\(p\)`?
 
-- ¿Cuál es la hipótesis nula?
+¿Cuál es la hipótesis nula?
 
-- ¿Qué significa *atrición*?
+¿Qué significa *atrición*?
 
-- ¿Se logró el objetivo del experimento?
+¿Se logró el objetivo del experimento?
 
 ]
 
@@ -317,7 +311,7 @@ $$
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;tfoot&gt;&lt;tr&gt;&lt;td style="padding: 0; " colspan="100%"&gt;
-&lt;span style="font-style: italic;"&gt;Nota:&lt;/span&gt; &lt;sup&gt;&lt;/sup&gt; Tomada de Angrist y Pischke (2009), Tabla 2.2.1.&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
+&lt;span style="font-style: italic;"&gt;Nota:&lt;/span&gt; &lt;sup&gt;&lt;/sup&gt; Tabla 2.2.1 de Angrist y Pischke (2009), Tabla 2.2.1.&lt;/td&gt;&lt;/tr&gt;&lt;/tfoot&gt;
 &lt;/table&gt;
 ]
 
@@ -326,20 +320,67 @@ $$
 
 # Desventajas
 
-- Tiempo
+Tiempo
 
-- Costo: 12 millones de USD del proyecto STAR
+Costo: 12 millones de USD del proyecto STAR
 
-- Preocupaciones legales y éticas
+Preocupaciones legales y éticas
 
---
+A veces es posible hacer experimentos, a veces es muy difícil y a veces es imposible
 
-- A veces es posible hacer experimentos, a veces es muy difícil y a veces es imposible
-
-- Usando métodos no experimentales, Angrist y Lavy (1999) encuentran resultados parecidos (pero con otros métodos)
+Usando métodos no experimentales, Angrist y Lavy (1999) encuentran resultados parecidos (pero con otros métodos)
 
 ---
 
+class: inverse, middle, center
+
+# Medición y precisión
+
+---
+
+# Medición y precisión
+
+En sus encargos seguramente deberán
+
+ - Proponer estrategias de evaluación
+
+ - Analizar evaluaciones realizadas previamente
+
+ - Analizar los entregables de evaluaciones a su cargo
+
+Deberán entonces interpretar
+
+ - La magnitud de los impactos estimados
+
+ - La significancia estadística de dichos impactos
+
+---
+
+# Significancia estadística
+
+Piensen en cómo funciona una prueba del azúcar en la sangre
+
+No es que nos saquen toda la sangre del cuerpo y determinen exactamente cuántas moléculas de cierto compuesto hay en el total de litros de sangre que tenemos
+
+A través de una *muestra* de sangre se puede *inferir* qué cantidad de dicha molécula tenemos en el cuerpo
+
+Así funcionan también las encuestas electorales
+
+Si tuviéramos acceso a la *población* de interés en un estudio, podríamos calcular una *estadística* de interés
+
+Por ejemplo, si en un estado se lanza un programa para combatir la pobreza, no necesariamente tenemos que acceder a la población del estado y conocer su situación de pobreza
+
+Podemos obtener una muestra que represente a la población del estado y ver si los hogares que recibieron y no recibieron la política son distintos en alguna dimensión que nos ocupe
+
+---
+
+# Error muestral
+
+La descripción anterior nos abre la puerta a pensar en dos razones por las cuales una política haría distinta la medida de pobreza entre tratados y no tratados
+
+- Porque efectivamente el programa fue exitoso
+
+- Porque la estadística que uso para hacer inferencia muestra una diferencia que ocurre solamente debido a que tengo una muestra y no puedo ver la población
 
 ---
 
@@ -347,67 +388,67 @@ class: inverse, middle, center
 
 # Motivación con un modelo de efectos constantes
 
+---
+
+# Regresión para la idenfiticación de efectos causales
+
+Con fines de simplificación, asumamos un efecto de tratamiento constante: `\(y_{1i}-y_{0i}=\rho\)`
+
+Consideremos el valor observado para un individuo 
+`$$y_i=y_{0i}+(y_{1i}-y_{0i})T_i$$`
+
+Sumemos y restemos `\(E(y_{0i})\)`:
+
+$$
+`\begin{aligned}
+y_i&amp;=E(y_{0i})+(y_{1i}-y_{0i})T_i+y_{0i}-E(y_{0i}) \\
+&amp;=\underbrace{\alpha}_{E(y_{0i})}+\underbrace{\rho}_{(y_{1i}-y_{0i})} T_i + \underbrace{\nu_i}_{y_{0i}-E(y_{0i})}
+\end{aligned}`
+$$
+
+Ahora evaluemos:
+
+$$
+`\begin{aligned}
+&amp;E(y|T_i=1)=\alpha+\rho+E(\nu_i|T_i=1) \\
+&amp;E(y|T_i=0)=\alpha+E(\nu_i|T_i=0)
+\end{aligned}`
+$$
 
 ---
 
 # Regresión para la idenfiticación de efectos causales
 
-- Con fines de simplificación, asumamos un efecto de tratamiento constante: `\(y_{1i}-y_{0i}=\rho\)`
-
-- Consideremos el valor observado para un individuo 
-`$$y_i=y_{0i}+(y_{1i}-y_{0i})D_i$$`
-
-- Sumemos y restemos `\(E(y_{0i})\)`:
+Restando
 
 $$
 `\begin{aligned}
-y_i&amp;=E(y_{0i})+(y_{1i}-y_{0i})D_i+y_{0i}-E(y_{0i}) \\
-&amp;=\underbrace{\alpha}_{E(y_{0i})}+\underbrace{\rho}_{(y_{1i}-y_{0i})} D_i + \underbrace{\nu_i}_{y_{0i}-E(y_{0i})}
+E(y|T_i=1)-E(y|T_i=0)&amp;=\rho+\overbrace{E(\nu_i|T_i=1)-E(\nu_i|T_i=0)}^{\text{Sesgo de selección}} \\
+&amp;=\rho+E(y_{0i}|T_i=1)-E(y_{0i}|T_i=0)
 \end{aligned}`
 $$
 
-- Ahora evaluemos:
+Es decir, el sesgo de selección es igual a la correlación entre el término de error y `\(T_i\)`
 
-$$
-`\begin{aligned}
-&amp;E(y|D_i=1)=\alpha+\rho+E(\nu_i|D_i=1) \\
-&amp;E(y|D_i=0)=\alpha+E(\nu_i|D_i=0)
-\end{aligned}`
-$$
+Y, de acuerdo a la segunda línea, también es igual a la diferencia en el resultado potencial (de no tratamiento), entre aquellos que son tratados y los que no son tratados
 
----
+En nuestro ejemplo del hospital, es muy probable que el sesgo de selección sea negativo porque los tratados son quienes tienen peor salud (en el estado no tratado)
 
-# Regresión para la idenfiticación de efectos causales
-
-- Restando
-
-$$
-`\begin{aligned}
-E(y|D_i=1)-E(y|D_i=0)&amp;=\rho+\overbrace{E(\nu_i|D_i=1)-E(\nu_i|D_i=0)}^{\text{Sesgo de selección}} \\
-&amp;=\rho+E(y_{0i}|D_i=1)-E(y_{0i}|D_i=0)
-\end{aligned}`
-$$
-- Es decir, el sesgo de selección es igual a la correlación entre el término de error y `\(D_i\)`
-
-- Y, de acuerdo a la segunda línea, también es igual a la diferencia en el resultado potencial (de no tratamiento), entre aquellos que son tratados y los que no son tratados
-
-- En nuestro ejemplo del hospital, es muy probable que el sesgo de selección sea negativo porque los tratados son quienes tienen peor salud (en el estado no tratado)
-
-- Como vimos antes, con asignación aleatoria, el sesgo de selección desaparece, por lo que una regresión de `\(y_i\)` en `\(D_i\)` estima el efecto causal `\(\rho\)`
+Como vimos antes, con asignación aleatoria, el sesgo de selección desaparece, por lo que una regresión de `\(y_i\)` en `\(T_i\)` estima el efecto causal `\(\rho\)`
 
 ---
 
 # Regresión como herramienta
 
-- Usaremos muy frecuentemente la regresión para la estimación de efectos causales
+Usaremos muy frecuentemente la regresión para la estimación de efectos causales
 
-- La interpretación causal de los estimadores no surge de la herramienta, sino del diseño
+La interpretación causal de los estimadores no surge de la herramienta, sino del diseño
 
-- Debemos tener en mente siempre si los estimadores están o no libres del sesgo de selección
+Debemos tener en mente siempre si los estimadores están o no libres del sesgo de selección
 
-- Antes vimos que en el experimento STAR las medias de las calificaciones entre grupos eran distintas
+Antes vimos que en el experimento STAR las medias de las calificaciones entre grupos eran distintas
 
-- La regresión nos servirá para hacer esencialmente lo mismo: comparación de `\(y_i\)` entre grupos
+La regresión nos servirá para hacer esencialmente lo mismo: comparación de `\(y_i\)` entre grupos
 
 
 ---
@@ -481,46 +522,56 @@ La Tabla 2.2.2 en MHE muestra los efectos de tratamiento estimados con regresió
 
 # El impacto de STAR con regresión
 
-- ¿Cómo se obtienen los resultados de esta tabla?
+¿Cómo se obtienen los resultados de esta tabla?
 
-- ¿Qué se deduce sobre los distintos tratamientos?
+¿Qué se deduce sobre los distintos tratamientos?
 
-- ¿Cuál es la variable dependiente?
+¿Cuál es la variable dependiente?
 
-- ¿Cuál es la variable independiente clave?
+¿Cuál es la variable independiente clave?
 
 ---
 
 # Regresión corta y larga
 
-- Con un tratamiento binario y asignado aleatoriamente, podemos estimar el efecto usando una regresión:
+Con un tratamiento binario y asignado aleatoriamente, podemos estimar el efecto usando una regresión:
 
 `$$y_i=\alpha+\beta T_i + u_i$$`
 
-- Es muy común, sin embargo, usar **controles**
+Es muy común, sin embargo, usar **controles**
 
-- Si una serie de características `\(X\)` no está correlacionada con `\(T_i\)`, se puede incluir en una versión larga de la regresión antes descrita:
+Si una serie de características `\(X\)` no está correlacionada con `\(T_i\)`, se puede incluir en una versión larga de la regresión antes descrita:
 
 `$$y_i=\alpha+\beta T_i + X_i'\gamma + u_i$$`
-- El valor numérico de `\(\hat{\beta}\)` en la regresión larga será muy cercano al obtenido con la regresión corta, pero se incrementa la precisión de los parámetros estimados
 
-- Dado que emplearemos regresión ampliamente en este curso, es necesario fijar algunas ideas sobre cómo entendemos y cómo usamos la regresión en la práctica
+El valor numérico de `\(\hat{\beta}\)` en la regresión larga será muy cercano al obtenido con la regresión corta, pero se incrementa la precisión de los parámetros estimados
 
----
-# Próxima sesión
-
-- Analizaremos el papel de la regresión en el análisis de efectos de tratamiento
-
-  - MHE, Capítulo 3
-
-- Avancemos con un ejemplo de un experimento:
-
-  - Baird, S., McIntosh, C., &amp; Özler, B. (2011). Cash or condition? Evidence from a cash transfer experiment. The *Quarterly journal of economics*, 126(4), 1709-1753.
-
+Dado que emplearemos regresión ampliamente en este curso, es necesario fijar algunas ideas sobre cómo entendemos y cómo usamos la regresión en la práctica
 
 ---
 
+
+# Actividad en grupos
+
+Recuerden las situaciones de afirmaciones causales discutidas al final de la primera sesión
+
+Retomemos en equipos de XX personas dichos ejemplos
+
+Discutan y luego compártanos los siguiente
+
+  - ¿Cómo surge el sesgo de selección en el planteamiento inicial de la relación causal?
+
+  - ¿Cuál sería el experimento ideal que les permitiría analizar la relación causal de manera que elimine el sesgo de selección?
+  
+  - ¿Qué dificultades, de cualquier índole, identifican para llevar a cabo el experimento ideal?
+
+---
+
 # Próxima sesión
+
+Hablaremos sobre cómo evaluar relaciones causales cuando no es posible implementar una estrategia experimental
+
+Recuerden que en las últimas dos clases usaremos R para hacer algunos ejercicios, para ello vale la pena revisar [este tutorial](https://rojasirvin.github.io/curso_conl2021/slides/instalacion_r.html#1) sobre la instalación de este software
 
 ---
 
