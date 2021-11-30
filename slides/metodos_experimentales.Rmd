@@ -131,7 +131,6 @@ Esta notación nos indica de manera compacta qué situación del resultado contr
 # Comparaciones observacionales
 
 
-
 ¿Qué nos dicen las comparaciones observacionales?
 
 Supongamos que tenemos acceso a datos sobre tratados y no tratados
