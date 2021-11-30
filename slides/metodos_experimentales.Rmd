@@ -48,6 +48,8 @@ xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
 
 # Agenda
 
+1. Definiremos qué entendemos por efectos causales
+
 1. Describiremos el experimento ideal
 
 1. Motivaremos un modelo de regresión a partir de un modelo de efectos constantes
@@ -57,6 +59,135 @@ xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
   - Pruebas de balance
   
   - Efectos de tratamiento
+
+---
+
+class: inverse, middle, center
+
+# Efectos causales
+
+---
+
+# Efecto causal
+
+Pensemos en un tratamiento binario
+
+$$T_i=\begin{cases}
+1 \quad\text{tratado} \\
+0 \quad\text{no tratado}
+\end{cases}$$
+
+El resultado que cada individuo tendría bajo cada régimen de tratamiento:
+  - $y_{1i}$ con $T_i=1$
+  
+  - $y_{0i}$ con $T_i=0$
+
+
+Supongamos que el tratamiento es recibir un trasplante y el resultado es morir (1) o seguir vivo (0) cinco días después de recibirlo (Hernan & Robins, 2018)
+
+  - Supongamos que Zeus recibió el trasplante y a los cinco días había fallecido
+  
+  - Por otro lado, Hena no recibió el trasplante y a los cinco días seguía viva
+  
+
+---
+
+# Efecto causal
+  
+Supongamos también que podemos conocer que
+  
+$$y_{Zeus}=\begin{cases}
+y_{1,Zeus}=1\\
+y_{0,Zeuz}=0
+\end{cases}$$
+
+es decir, si no hubiera recibo el trasplante, Zeus estaría vivo cinco días después
+
+Similarmente, supongamos que conocemos que
+
+$$y_{Hena}=\begin{cases}
+y_{1,Hena}=0\\
+y_{0,Hena}=0
+\end{cases}$$
+
+**Efecto causal para un individuo**: el tratamiento tiene un efecto causal para $i$ si $y_{1i}\neq y_{0i}$
+  
+En nuestro ejemplo, el tratamiento tuvo un efecto causal en Zeus, pero no en Hena
+
+---
+
+# Resultados potenciales
+
+$y_{1i}$ y $y_{0i}$ se conocen como resultados potenciales o contrafactuales
+
+El término *potencial* se debe a que solo vemos uno de ellos
+
+En nuestro ejemplo, solo observamos que $y_{0,Zeus}=y_{1,Zeus}=1$
+
+En general, el efecto causal para un individuo no puede ser identificado
+
+---
+
+# Efectos causales promedio
+
+Supongamos que podemos estudiar a la familia de Zeus, $N=20$
+
+```{r table.personas, echo=FALSE, message=FALSE, warnings=FALSE}
+
+personaid <- c("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20")
+y0 <- c(0,1,0,0,0,1,0,0,1,1,0,1,1,0,0,0,1,1,1,1)
+y1 <- c(1,0,0,0,0,0,0,1,1,0,1,1,1,1,1,1,1,0,0,0)
+
+table.personas <- data.frame(cbind(personaid, y0,y1))
+
+colnames(table.personas) = c("Persona","y0","y1")
+
+table.personas %>%
+  kbl(align = "lcc",
+      escape = FALSE,
+      full_width = FALSE) %>%
+  kable_paper(c("hover", "condensed", "responsive")) %>% 
+  add_header_above(c("Efectos individuales" = 3 ),
+                   bold = TRUE,
+                   background = "white") %>% 
+    scroll_box(height = "70%")
+
+```
+
+---
+
+# Efectos causales promedio
+
+De la tabla podemos concluir que $P(y_{1i}=1)=10/20=0.5$, es decir, la mitad de quienes reciben el trasplante morirían después de cinco días
+
+DY también observamos que $P(y_{0i}=1)=0.5$, es decir, que la probabilidad de morir de no haber recibido el tratamiento es también de 0.5
+
+En el anterior ejemplo, el tratamiento no tiene un efecto causal pues la probabilidad de morir con y sin el tratamiento es igual
+
+**Efecto causal promedio** en una población: un efecto causal promedio de $T$ en el resultado $y$ está presente si $P(Y_{1i}=1\neq Y_{0i}=1)$ en la población de interés
+
+Cuando pensamos en **poblaciones**, podemos usar expectativas para definir el efecto causal promedio: $E(Y_{1i}\neq Y_{0i})$, lo cual permite generalizar a resultados no binarios
+
+La ausencia de efectos individuales promedio no implica ausencia de efectos individuales
+
+Cuando no hay efecto causal individual **para ningún** individuo, $y_{0i}=y_{1i}$, para todo $i$, decimos que se trata de una hipótesis **estricta** (*sharp*) de efectos de tratamiento
+
+---
+
+# Variabilidad muestral
+
+En la práctica, casi nunca podemos observar a la población de interés, sino solo a una muestra
+
+Por tanto, $P(y_{ti}=y)$ no puede ser observada sino estimada
+
+Debido al error muestral, la proporción que muere en la muestra no es numéricamente igual a la proporción que muere en la población
+
+La hipótesis que queremos probar es que hay un efecto causal en la población
+
+Pero al trabajar con muestras, puede haber diferencias que surjan solo por el muestreo
+
+Nuestra tarea es distinguir estas diferencias de los verdaderos efectos causales
+
 
 ---
 
