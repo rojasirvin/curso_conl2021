@@ -68,9 +68,6 @@ MathJax.Hub.Config({
 &lt;/style&gt;
 
 
-```
-## Warning: package 'flair' was built under R version 4.1.2
-```
 
 
 ---
@@ -185,17 +182,11 @@ Por tanto, `\(\tilde{Y}_{6,post}=102\)` es el número de bancos que el distrito 
 .pull-left[
 Podemos contruir el contrafactual para el distrito 6 observando la pendiente del distrito 8
 
+Es decir, usando la información de la trayectoria del distrito 8, construimos lo que le hubiera pasado al distrito 6 de no haber recibido la política 
 
 
 
-```r
-dd_grafica &lt;- banks_contrafactual %&gt;% 
-  ggplot(aes(x=year, y=banks, color=distrito, linetype=tipo))+
-  geom_line(size=2) +
-  scale_linetype_manual(values=c("dashed", "solid")) +
-  scale_y_continuous(limits=c(100,180))+
-  geom_brace(aes(c(1931.1,1931.3), c(121,102), label="Efecto del\ntratamiento"), inherit.data=F, labelsize=3, rotate = 90)
-```
+
 ]
 
 .pull-right[
@@ -524,7 +515,11 @@ class: inverse, middle, center
 
 # Motivación
 
-Cuando tenemos datos a nivel individual de individuos tratados y no tratados podemos usar 
+Cuando tenemos datos a nivel individual de individuos tratados y no tratados podemos usar sus características observables para construir los contrafactuales de los tratados
+
+Podemos pensar que individuos que se parecen en una serie de características `\(X\)`, de las cuales tenemos datos, se parecerán en todo lo demás
+
+Asumiremos que los individuos no tratados que son muy parecidos a los tratados 
 
 
 ---
@@ -535,8 +530,8 @@ Las razones que deteriminan la asignación del tratamiento determinen también e
     
 $$
 `\begin{align}
-E(y(1)|D=1)&amp;-E(y(0)|D=1)=\\
-=&amp;\text{efecto del tratamiento}+E(y(0)|D=1)-E(y(0)|D=0)
+E(Y(1)|D=1)&amp;-E(Y(0)|D=1)=\\
+=&amp;\text{efecto del tratamiento}+E(Y(0)|D=1)-E(Y(0)|D=0)
 \end{align}`
 $$
 
@@ -562,7 +557,7 @@ $$
 E(Y(0)|D=1,X)=E(Y(0)|D=0,X)
 $$
 
-Esto es, los valores esperados de `\(y(1)\)` y `\(y(0)\)` son iguales cuando nos fijamos en cada valor de `\(X\)`
+Esto es, los valores esperados de `\(Y(1)\)` y `\(Y(0)\)` son iguales cuando nos fijamos en cada valor de `\(X\)`
 
 ---
 
@@ -591,11 +586,12 @@ La teoría de los métodos de emparejamiento se basa entonces en dos condiciones
   - El supuesto indica que si me fijo en los individuos rurales y con universidad, ahí la asignación de `\(D\)` es independiente de `\(y\)`
 
 
-**Traslape**: indica que 
+**Traslape**: indica que tenemos individuos tratados y no tratados para hacer comparaciones
 
-$$
-P(D=1|X) &lt; 1
-$$
+  - En el ejemplo anterior, el traslape significa que dentro de los individuos rurales y con universidad, tenemos tanto tratados como no tratados
+  
+  - Si solo tuviéramos tratados en la celda de individuos rurales y con universidad, no podríamos construir su contrafactual
+
 ---
 
 # Ejemplo: programa hipotético de empleo
@@ -752,7 +748,7 @@ Decimos que esa pareja hizo *match*
 
 Por ejemplo, la primera unidad tratada, con 18 años y un ingreso de 9500 estaría emparejada con la unidad 14 del grupo de control, que tiene también 18 años y un ingreso de 9500
 
-  - Para el individuo 18 construimos su ingreso contrafactual
+  - Para el individuo 1 construimos su ingreso contrafactual
 
 Cuando hay varias unidades en el grupo de control que pueden ser empatadas con la de tratamiento, podemos construir el ingreso contrafactual calulando el promedio
 
@@ -786,9 +782,12 @@ La muestra apareada o contrafactual será
 ## 10           10          30             9875
 ```
 ]
+]
+
+.pull-right[
 
 Noten que la edad es la misma entre los tratados y la muestra apareada
-.tiny[
+
 
 ```r
 mean(data.treat$age_treat)
@@ -805,15 +804,44 @@ mean(data.matched$age_matched)
 ```
 ## [1] 24.3
 ```
-]
+
+En este caso, decimos que la edad *está balanceada*
+
 ]
 
+---
+
+
+# Ejemplo: programa hipotético de empleo
+
+
+.pull-left[
+
+La muestra emparejada o contrafactual será
+
+.tiny[
+
+```
+## # A tibble: 10 x 3
+##    unit_matched age_matched earnings_matched
+##           &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+##  1            1          18             8050
+##  2            2          29            10525
+##  3            3          24             9400
+##  4            4          27            10075
+##  5            5          33            11425
+##  6            6          22             8950
+##  7            7          19             8275
+##  8            8          20             8500
+##  9            9          21             8725
+## 10           10          30             9875
+```
+]
+]
 
 .pull-right[
 
-Decimos que la edad *está balanceada*
-
-Y entonces podemos calcular el efecto de tratamiento como la diferencia de ingresos entre los tratados y la muestra apareada
+Y entonces podemos calcular el efecto de tratamiento como la diferencia de ingresos entre los tratados y la muestra emparejada
 
 .tiny[
 
@@ -839,12 +867,12 @@ Observemos lo que ocurre con la distribución de edades en ambos grupos
 
 .pull-left[
 Tratados
-![](figures/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](figures/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 No tratados
-![](figures/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](figures/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ]
 

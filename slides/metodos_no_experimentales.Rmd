@@ -225,6 +225,8 @@ Por tanto, $\tilde{Y}_{6,post}=102$ es el número de bancos que el distrito 6 hu
 .pull-left[
 Podemos contruir el contrafactual para el distrito 6 observando la pendiente del distrito 8
 
+Es decir, usando la información de la trayectoria del distrito 8, construimos lo que le hubiera pasado al distrito 6 de no haber recibido la política 
+
 ```{r, out.width="100%", fig.align='center', message=F, warning=F, echo=F, eval=T}
 banks_contrafactual <- banks %>%
     mutate(banks=ifelse(year==1930 | year==1931,banks,NA)) %>% 
@@ -239,7 +241,7 @@ d6_contrafactual <- banks_contrafactual %>%
 banks_contrafactual <- rbind(banks_contrafactual,d6_contrafactual)
 ```
 
-```{r, echo=T, eval=T, message=F, warning=F, fig.height=5}
+```{r, echo=F, eval=T, message=F, warning=F, fig.height=5}
 dd_grafica <- banks_contrafactual %>% 
   ggplot(aes(x=year, y=banks, color=distrito, linetype=tipo))+
   geom_line(size=2) +
@@ -568,7 +570,11 @@ class: inverse, middle, center
 
 # Motivación
 
-Cuando tenemos datos a nivel individual de individuos tratados y no tratados podemos usar 
+Cuando tenemos datos a nivel individual de individuos tratados y no tratados podemos usar sus características observables para construir los contrafactuales de los tratados
+
+Podemos pensar que individuos que se parecen en una serie de características $X$, de las cuales tenemos datos, se parecerán en todo lo demás
+
+Asumiremos que los individuos no tratados que son muy parecidos a los tratados 
 
 
 ---
@@ -579,8 +585,8 @@ Las razones que deteriminan la asignación del tratamiento determinen también e
     
 $$
 \begin{align}
-E(y(1)|D=1)&-E(y(0)|D=1)=\\
-=&\text{efecto del tratamiento}+E(y(0)|D=1)-E(y(0)|D=0)
+E(Y(1)|D=1)&-E(Y(0)|D=1)=\\
+=&\text{efecto del tratamiento}+E(Y(0)|D=1)-E(Y(0)|D=0)
 \end{align}
 $$
 
@@ -606,7 +612,7 @@ $$
 E(Y(0)|D=1,X)=E(Y(0)|D=0,X)
 $$
 
-Esto es, los valores esperados de $y(1)$ y $y(0)$ son iguales cuando nos fijamos en cada valor de $X$
+Esto es, los valores esperados de $Y(1)$ y $Y(0)$ son iguales cuando nos fijamos en cada valor de $X$
 
 ---
 
@@ -635,11 +641,12 @@ La teoría de los métodos de emparejamiento se basa entonces en dos condiciones
   - El supuesto indica que si me fijo en los individuos rurales y con universidad, ahí la asignación de $D$ es independiente de $y$
 
 
-**Traslape**: indica que 
+**Traslape**: indica que tenemos individuos tratados y no tratados para hacer comparaciones
 
-$$
-P(D=1|X) < 1
-$$
+  - En el ejemplo anterior, el traslape significa que dentro de los individuos rurales y con universidad, tenemos tanto tratados como no tratados
+  
+  - Si solo tuviéramos tratados en la celda de individuos rurales y con universidad, no podríamos construir su contrafactual
+
 ---
 
 # Ejemplo: programa hipotético de empleo
@@ -749,7 +756,7 @@ Decimos que esa pareja hizo *match*
 
 Por ejemplo, la primera unidad tratada, con 18 años y un ingreso de 9500 estaría emparejada con la unidad 14 del grupo de control, que tiene también 18 años y un ingreso de 9500
 
-  - Para el individuo 18 construimos su ingreso contrafactual
+  - Para el individuo 1 construimos su ingreso contrafactual
 
 Cuando hay varias unidades en el grupo de control que pueden ser empatadas con la de tratamiento, podemos construir el ingreso contrafactual calulando el promedio
 
@@ -771,22 +778,42 @@ data.matched
 
 ```
 ]
+]
+
+.pull-right[
 
 Noten que la edad es la misma entre los tratados y la muestra apareada
-.tiny[
+
 ```{r echo=T}
 mean(data.treat$age_treat)
 mean(data.matched$age_matched)
 ```
-]
+
+En este caso, decimos que la edad *está balanceada*
+
 ]
 
+---
+
+
+# Ejemplo: programa hipotético de empleo
+
+
+.pull-left[
+
+La muestra emparejada o contrafactual será
+
+.tiny[
+```{r}
+data.matched
+
+```
+]
+]
 
 .pull-right[
 
-Decimos que la edad *está balanceada*
-
-Y entonces podemos calcular el efecto de tratamiento como la diferencia de ingresos entre los tratados y la muestra apareada
+Y entonces podemos calcular el efecto de tratamiento como la diferencia de ingresos entre los tratados y la muestra emparejada
 
 .tiny[
 ```{r echo=T, message=F, warning=F }
