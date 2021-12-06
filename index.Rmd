@@ -54,7 +54,7 @@ En este sitio encontrarán materiales para las cinco sesiones de Introducción a
 
 [Sesión 2.](https://rojasirvin.github.io/curso_conl2021/slides/metodos_experimentales.html#1) Métodos experimentales
 
-Sesión 3. Métodos no experimentales
+[Sesión 3](https://rojasirvin.github.io/curso_conl2021/slides/metodos_no_experimentales.html#1) . Métodos no experimentales
 
 Sesión 4. Aplicaciones de métodos experimentales
 

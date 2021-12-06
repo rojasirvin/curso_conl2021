@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Métodos no experimentales</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Irvin Rojas" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cide.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+
+.title[
+# Métodos no experimentales
+]
+
+.subtitle[
+## Evaluación de Impacto
+]
+
+.author[
+### Irvin Rojas &lt;br&gt; [rojasirvin.com](https://www.rojasirvin.com/) &lt;br&gt; [&lt;i class="fab fa-github"&gt;&lt;/i&gt;](https://github.com/rojasirvin) [&lt;i class="fab fa-twitter"&gt;&lt;/i&gt;](https://twitter.com/RojasIrvin) [&lt;i class="ai ai-google-scholar"&gt;&lt;/i&gt;](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&amp;hl=en)
+]
+
+
+&lt;div style = "position:fixed; visibility: hidden"&gt;
+`$$\require{color}\definecolor{yellow}{rgb}{1, 0.8, 0.16078431372549}$$`
+`$$\require{color}\definecolor{orange}{rgb}{0.96078431372549, 0.525490196078431, 0.203921568627451}$$`
+`$$\require{color}\definecolor{green}{rgb}{	54,	143	,79}$$`
+`$$\require{color}\definecolor{purple}{rgb}{129,	55,	219}$$`
+`$$\require{color}\definecolor{blue}{rgb}{69, 8, 219}$$`
+
+
+&lt;/div&gt;
+
+&lt;script type="text/x-mathjax-config"&gt;
+MathJax.Hub.Config({
+  TeX: {
+    Macros: {
+      yellow: ["{\\color{yellow}{#1}}", 1],
+      orange: ["{\\color{orange}{#1}}", 1],
+      green: ["{\\color{green}{#1}}", 1],
+      purple: ["{\\color{purple}{#1}}", 1],
+      blue: ["{\\color{purple}{#1}}", 1]
+    },
+    loader: {load: ['[tex]/color']},
+    tex: {packages: {'[+]': ['color']}}
+  }
+});
+&lt;/script&gt;
+
+&lt;style&gt;
+.yellow {color: #FFCC29;}
+.orange {color: #F58634;}
+.green {color: #368F53;}
+.purple {color: #8137DB}
+.blue {color: #4508DB}
+&lt;/style&gt;
+
+
+```
+## Warning: package 'flair' was built under R version 4.1.2
+```
+
+
+---
+
+# Agenda
+
+Estudiaremos los principios de tres métodos de evaluación no experimental
+
+  - Diferencia en diferencias
+  - Diseños con discontinuidades
+  - Métodos de emparejamiento basados en el puntaje de propensión
+  
+Estos métodos requieren más supuestos que los métodos experimentales
+
+
+---
+
+class: inverse, middle, center
+
+# Diferencia en diferencias
+
+---
+
+# Motivación
+
+Muy frecuentemente enfrentamos casos donde no podemos hacer experimentos
+
+Algunos programas afectan regiones o grupos enteros
+
+A pesar de no poder generar variación experimental, es posible disponer de información de la variable de resultados antes y después de la intervención
+
+Diferencia en diferencias (DID) es un método muy popular y fácil de implementar
+
+Recae en un supuesto de *tendencias comúnes* que es sencillo de conceptualizar y es posible mostrar empíricamente
+
+---
+
+# Diferencia en diferencias
+
+.pull-left[
+Angrist &amp; Pischke (2014) describen lo sucedido con el sector bancario en Mississippi durante la Gran Depresión
+
+En EUA, la FED tiene 12 bancos regionales y cada uno tiene autonomía para tomar ciertas decisiones de política monetaria
+
+En particular, Mississippi tiene una parte del estado bajo el mando del distrito 6 (Atlanta) y la otra mitad en el distrito 8 (San Luis)
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/banks_map.png" alt="Fuente: Richardson &amp;amp; Troost (2009)" width="75%" /&gt;
+&lt;p class="caption"&gt;Fuente: Richardson &amp; Troost (2009)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+
+# Diferencia en diferencias
+
+Como respuesta a las corridas bancarias que caracterizaron la crisis de 1929, los bancos comerciales en Mississippi se vieron expuestos a dos políticas distintas
+
+$$
+T=
+`\begin{cases}
+1\quad\quad \text{proveer liquidez adicional (distrito 6)} \\
+0\quad\quad \text{dar igual o menos liquidez (distrito 8)} \\
+\end{cases}`
+$$
+
+
+Si estamos interesados en la cantidad de bancos que sobrevivieron y decir algo sobre qué política es más efectiva, ¿qué podemos hacer?
+
+Una primera respuesta sería contar la diferencia después de la crisis:
+
+| Distrito 8 | Distrito 6 | Diferencia |
+|:---:|:---:|:---:|
+| `\(T=0\)` | `\(T=1\)` | |
+| 132 bancos | 121 bancos | 11 bancos
+
+Pareciera que la política de proveer liquidez, *easy money*, **causó** que quebraran más bancos
+
+Sin embargo, esta comparación claramente ignora las condiciones iniciales
+
+---
+
+# Diferencia en diferencias
+
+.pull-left[
+
+Gráficamente observamos
+
+
+
+
+&lt;img src="figures/unnamed-chunk-3-1.png" width="90%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+Del distrito 8 (no tratado) podemos obtener la pendiente:
+
+`$$m_{NT}=\frac{Y_{8,post}-Y_{8,pre}}{X_{8,post}-X_{8,pre}}=\frac{132-165}{1931-1930}=-33$$`
+Y entonces, podemos encontrar cuál hubiera sido el número de bancos en el distrio 6 (tratado) si hubiera seguido la pendiente del distrito 8:
+
+`$$m_T=\frac{\tilde{Y}_{6,post}-Y_{6,pre}}{X_{6,post}-X_{6,pre}}=\frac{\tilde{Y}_{6,post}-135}{1931-1930}=-33$$`
+Por tanto, `\(\tilde{Y}_{6,post}=102\)` es el número de bancos que el distrito 6 hubiera tenido si hubiera seguido una tendencia paralela a la del distrito 8 ]
+
+---
+
+# Diferencia en diferencias
+
+.pull-left[
+Podemos contruir el contrafactual para el distrito 6 observando la pendiente del distrito 8
+
+
+
+
+```r
+dd_grafica &lt;- banks_contrafactual %&gt;% 
+  ggplot(aes(x=year, y=banks, color=distrito, linetype=tipo))+
+  geom_line(size=2) +
+  scale_linetype_manual(values=c("dashed", "solid")) +
+  scale_y_continuous(limits=c(100,180))+
+  geom_brace(aes(c(1931.1,1931.3), c(121,102), label="Efecto del\ntratamiento"), inherit.data=F, labelsize=3, rotate = 90)
+```
+]
+
+.pull-right[
+
+```r
+dd_grafica
+```
+
+![](figures/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+
+---
+
+# Diferencia en diferencias
+
+Podemos dar así una primera definición de lo que es la diferencia en diferencias del número de bancos que sobrevivieron a la Gran Depresión en Mississippi
+
+$$
+`\begin{aligned}
+\delta_{DID}&amp;=(Y_{6,post}-Y_{6,pre})-(Y_{8,post}-Y_{8,pre}) \\
+&amp;=(Y_{6,1931}-Y_{6,1931})-(Y_{8,1930}-Y_{8,1930}) \\
+&amp;=(121-135)-(132-165) \\
+&amp;=-14+33 = 19
+\end{aligned}`
+$$
+
+El estimador de DID toma en cuenta las diferencias inciales
+
+En este caso, el distrito 8 ya tenía más bancos abiertos que el 6 antes de la crisis
+
+DID construye un contrafactual para las unidades tratadas usando la pendiente de las unidades no tratadas
+
+---
+
+# Diferencia en diferencias
+
+El supuesto fundamental es el de **tendencias comunes**, es decir, que en ausencia del tratamiento, el grupo de tratamiento se hubiera comportado igual al grupo de control
+
+Si hay varios puntos pre intervención, el supuesto de tendencias comunes puede probarse empíricamente
+
+---
+
+# Un ejemplo con más periodos
+
+.pull-left[
+Consideremos un programa de empleo que otorga entrenamiento y mejora el acceso a los mercados de trabajo
+
+El programa se asigna a nivel municipal y los representantes de los municipios que desean inscribirse deben acercarse a las oficinas del programa
+
+La variable de interés es la tasa de empleo a nivel municipal
+
+¿Creen que un programa así tiene las propiedades de un diseño aleatorio?
+
+]
+
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/dd_empleo.png" alt="Fuente: Gertler et al. (2017)" width="100%" /&gt;
+&lt;p class="caption"&gt;Fuente: Gertler et al. (2017)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+
+# Un ejemplo con más periodos
+
+.pull-left[
+La distancia vertical de los puntos A y B `\(distancia(A-B)=0.74-0.60=0.14\)` es una medida ingenua del impacto del programa
+
+  - No toma en cuenta que la tasa de empleo ya venía creciendo para todos los municipios
+  
+  - No toma en cuenta que los municipios que se inscribieron tenían una menor tasa de empleo antes del programa
+  
+DID le construye el contrafactual a los municipios tratados usando información de la trayectoria de los no tratados
+
+DID *purga* la medida ingenua del cambio en la tasa de empleo que hubiera ocurrido si se hubiera seguido la trayectoria de los municipios no tratados
+] 
+
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/dd_empleo.png" alt="Fuente: Gertler et al. (2017)" width="100%" /&gt;
+&lt;p class="caption"&gt;Fuente: Gertler et al. (2017)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+
+
+---
+
+class: inverse, middle, center
+
+# Regresión discontinua
+
+
+---
+
+# Motivación
+
+	 
+El mundo está lleno de reglas
+ 
+Podemos explotar estas reglas para aproximar experimentos
+ 
+Ejemplos:
+	 
+  - Índice de pobreza en PROGRESA
+  
+  - Edad legal para tomar
+  
+  - Seguros catastróficos
+  
+¿Qué programas o intervenciones conocen que funcionen así?
+
+
+En los diseños con discontinuidades nos enfocaremos en unidades que están muy cercana de los límites de elegibilidad, donde podemos asumir que las características observables y no observables de tratados y no tratados son idénticas
+
+---
+	 
+# Un ejemplo de un programa agrícola
+ 
+.pull-left[
+Consideremos un programa agrícola que busca incrementar la producción de arroz otorgando fertilizantes a los productores
+
+El programa se diseña exclusivamente para atender a los productores con menos de 50 hectáreas
+
+Podemos esperar entonces que los productores alrededor del corte de elegibilidad sean muy parecidos
+
+Por ejemplo, un productor con 49.9 hectáreas será muy parecido a uno de 50.1
+
+A medida que nos alejamos del corte de elegibilidad las diferencias entre productores y fincas será mayor
+]
+ 
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/arroz_produccion.png" alt="Fuente: Gertler et al. (2017)" width="100%" /&gt;
+&lt;p class="caption"&gt;Fuente: Gertler et al. (2017)&lt;/p&gt;
+&lt;/div&gt;
+]
+---
+
+# Impacto del programa
+ 
+.pull-left[
+El impacto del programa puede ser estimado como la diferencia en `\(y\)` entre las unidades que están a ambos lados del corte de elegibilidad
+
+Nuestro grupo tratado se compara con el no tratado que no recibió el programa por tener más de 50 hectáreas
+
+El supuesto es que las unidades antes y después del corte eran muy parecidas en todos los aspectos antes de recibir el programa
+
+En la vecindad del corte de elegibilidad tenemos *casi* un experimento aleatorio
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/arroz_rd.png" alt="Fuente: Gertler et al. (2017)" width="100%" /&gt;
+&lt;p class="caption"&gt;Fuente: Gertler et al. (2017)&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+# Modelo de discontinuidades nítidas
+ 
+`\(D_a\)` es el estado del tratamiento
+
+$$
+D_a =
+`\begin{cases}
+1  &amp; \text{si } a \leq 50 \\
+0  &amp; \text{si } a &gt; 50
+\end{cases}`
+$$
+	 
+	 
+`\(a\)` es conocida como *running variable*, *score*, variable de selección, variable de asignación, etc.
+ 
+El tratamiento es una función determinística de `\(a\)`
+
+  - Si conocemos `\(a\)` entonces conocemos `\(D_a\)`
+ 
+El tratamiento es discontinuo sobre `\(a\)`
+
+  - No importa qué tanto nos acercamos al corte, el estatus de tratamiento es el mismo hasta `\(a\)`
+ 
+  
+---
+
+# Discontinuidades níticas y regresión
+ 
+Formulamos un modelo estadístico que nos permite describir la producción en función del área y de si se recibe o no el programa
+
+$$
+\bar{P}_a=\alpha+\rho D_a + \gamma a + \epsilon_a
+$$
+
+A este lo llamamos **un modelo para el valor esperado de `\(y\)` dado `\(X\)`**, `\(E(y|X)\)`
+
+`\(\bar{P}_a\)` es la cantidad producida promedio para los productores con `\(a\)` hectáreas
+
+`\(\rho\)` captura el salto en la producción
+
+`\(\hat{\rho}=\text{distancia A-B}\)` es la producción adicional por recibir el programa
+
+En la sesión práctica aprenderemos a estimar este tipo de modelos
+	
+ 
+---
+
+# Diferencias con otros diseños
+ 
+A diferencia de los métodos, aquí no hay valores de `\(a\)` para los que observemos individuos en ambos estados del tratamiento
+ 
+La interpretación de la RD es en la vecindad de la discontinuidad, es decir, se trata de un impacto **local**
+
+Es poco creíble que los efectos sean válidos para productores con 5 hectáreas o con 500
+ 
+---
+
+# No linealidad vs discontinuidad
+ 
+.pull-left[
+Estimar el modelo de RD cuando la relación entre `\(E[y|X]\)` es como en el tercer panel nos llevaría a inferir un salto donde no existe
+ 
+Al usar RD debemos asegurarnos que estamos identificando una discontinuidad
+ 
+ - Modelar la no linearidad
+ - Concentrarnos solo en una ventana cercana a `\(a_0\)`
+]
+  
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/discontinuity_nonlinearity.png" alt="Fuente: Angrist &amp;amp; Pischke (2014)" width="70%" /&gt;
+&lt;p class="caption"&gt;Fuente: Angrist &amp; Pischke (2014)&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+
+# No linealidades
+ 
+Podemos usar polinomios de `\(a\)` para describir una relación no lineal entre el área y la producción
+
+Idealmente, las conclusiones no deberían cambiar de acuerdo al grado del polinomio usado
+
+El consejo es intentar varias especificaciones y no solo la que se ajuste más a nuestras expectativas de los resultados
+
+Podemos especificar directamente un polinomio cuadrático del área
+
+$$
+\bar{P}_a=\alpha+\rho D_a + \gamma_1 a + \gamma_2 a^2 + \epsilon_a
+$$
+
+En la práctica, casi nunca usamos un polinomio mayor a 3
+
+
+---
+
+# No linealidades
+
+También podemos espcificar un coeficiente diferente para `\(a\)` antes y después de `\(a_0\)`
+
+$$
+\bar{P}_a=\alpha+\rho D_a + \gamma(a-a_0) + \delta[(a-a_0)D_a] + \epsilon_a
+$$
+
+Esto nos ayuda a modelar mejor el salto discreto
+
+Qué pasa cuando el productor recibe el programa, `\(D=1\)`
+
+$$
+`\begin{align}
+\bar{P}_{a,D=1}&amp;=\alpha+\rho + \gamma(a-a_0) + \delta(a-a_0) + \epsilon_a \\
+&amp;=\alpha+\rho+(\gamma+\delta)(a-a_0)+\epsilon_a
+\end{align}`
+$$
+Y cuando no lo recibe, `\(D=0\)`
+
+$$
+`\begin{align}
+\bar{P}_{a,D=0}&amp;=\alpha+ \gamma(a-a_0) + \epsilon_a 
+\end{align}`
+$$
+Es decir, asumimos un modelo diferente para el valor esperado de la producción para productores que recibien y que no reciben el programa
+
+---
+
+# No linealidades
+
+Podemos emplear una combinación de no linealidades y cambios en pendiente:
+
+$$
+`\begin{aligned}
+\bar{P}_a&amp;=\alpha+\rho D_a + \gamma_1(a-a_0) +\gamma_2(a-a_0)^2+\delta_1[(a-a_0)D_a]+ \delta_2[(a-a_0)^2D_a] + \epsilon_a
+\end{aligned}`
+$$
+
+En todos los casos, se interpreta a `\(\rho\)` como el efecto del tratamiento
+ 
+---
+
+# Efectos estimados con distintas ventanas
+ 
+En la práctica debemos concentrarnos en *ventanas* cercanas a `\(a_0\)`:
+
+$$
+\bar{M}_a=\alpha+\rho D_a + \gamma a + \epsilon_a, \quad \quad a_0-b\leq a\leq a_o+b
+$$
+
+Donde `\(b\)` es el ancho de banda
+
+Un ancho de banda menor implica menos datos y por tanto mayor varianza muestral
+
+Se recomienda estimar el modelo con distintos anchos de banda y observar el comportamiento de los efectos estimados
+
+---
+
+class: inverse, middle, center
+
+# Emparejamiento con puntaje de propensión
+
+---
+
+# Motivación
+
+Cuando tenemos datos a nivel individual de individuos tratados y no tratados podemos usar 
+
+
+---
+
+# Recordatorio del sesgo de selección
+ 
+Las razones que deteriminan la asignación del tratamiento determinen también el valor de `\(y\)`
+    
+$$
+`\begin{align}
+E(y(1)|D=1)&amp;-E(y(0)|D=1)=\\
+=&amp;\text{efecto del tratamiento}+E(y(0)|D=1)-E(y(0)|D=0)
+\end{align}`
+$$
+
+La diferencia `\(E(Y(0)|D=1)-E(Y(0)|D=0)\)` es el **sesgo de selección**
+
+Una forma de eliminar el sesgo de selección es mediante la asignación aleatoria del tratamiento
+
+---
+
+# Métodos de emparejamiento o *matching*
+
+Los métodos emparejamiento o *matching* recaen en el **supuesto de independencia condicional**
+
+Al *controlar* por una serie de características `\(X_i\)`, el tratamiento es *como* si fuera aleatorio
+
+Podemos escribir
+
+$$
+E(Y(1)|D=1,X)=E(Y(1)|D=0,X)
+$$
+
+$$
+E(Y(0)|D=1,X)=E(Y(0)|D=0,X)
+$$
+
+Esto es, los valores esperados de `\(y(1)\)` y `\(y(0)\)` son iguales cuando nos fijamos en cada valor de `\(X\)`
+
+---
+
+# Matching exacto
+ 
+Un estimador de matching exacto consiste en *emparejar* individuos tratados y no tratados para cada valor específico de las `\(X\)` y luego tomar el promedio ponderado de las diferencias
+  
+Tenemos datos observacionales de individuos que recibieron y no recibieron un tratamiento
+  
+Tenemos una serie de características discretizadas en `\(X_i\)`
+
+Asumimos que controlando por las características `\(X_i\)` podemos obtener diferencias causales
+
+Luego hacemos un promedio de dichas diferencias
+
+---
+
+# Supuestos estadísticos
+
+La teoría de los métodos de emparejamiento se basa entonces en dos condiciones
+
+**Inconfundibilidad**: indica que al observar las características `\(X\)` relevantes, la asignación del tratamiento es como si hubiera habido un experimento
+
+  - Supongamos que tengo dos características: rural/urbano y con universidad/sin universidad
+  
+  - El supuesto indica que si me fijo en los individuos rurales y con universidad, ahí la asignación de `\(D\)` es independiente de `\(y\)`
+
+
+**Traslape**: indica que 
+
+$$
+P(D=1|X) &lt; 1
+$$
+---
+
+# Ejemplo: programa hipotético de empleo
+
+
+
+
+Supongamos que observamos los siguientes datos
+
+
+.pull-left[
+.tiny[
+
+```
+## # A tibble: 10 x 3
+##    unit_treat age_treat earnings_treat
+##         &lt;dbl&gt;     &lt;dbl&gt;          &lt;dbl&gt;
+##  1          1        18           9500
+##  2          2        29          12250
+##  3          3        24          11000
+##  4          4        27          11750
+##  5          5        33          13250
+##  6          6        22          10500
+##  7          7        19           9750
+##  8          8        20          10000
+##  9          9        21          10250
+## 10         10        30          12500
+```
+]
+]
+
+
+.pull-right[
+.tiny[
+
+```
+## # A tibble: 20 x 3
+##    unit_control age_control earnings_control
+##           &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+##  1            1          20             8500
+##  2            2          27            10075
+##  3            3          21             8725
+##  4            4          39            12775
+##  5            5          38            12550
+##  6            6          29            10525
+##  7            7          39            12775
+##  8            8          33            11425
+##  9            9          24             9400
+## 10           10          30            10750
+## 11           11          33            11425
+## 12           12          36            12100
+## 13           13          22             8950
+## 14           14          18             8050
+## 15           15          43            13675
+## 16           16          39            12775
+## 17           17          19             8275
+## 18           18          30             9000
+## 19           19          51            15475
+## 20           20          48            14800
+```
+]
+]
+
+---
+
+# Ejemplo: programa hipotético de empleo
+
+
+.pull-left[
+
+Noten que si hicieramos diferencias simples obtendríamos
+
+.tiny[
+
+```r
+mean(data.treat$earnings_treat)
+```
+
+```
+## [1] 11075
+```
+
+```r
+mean(data.control$earnings_control)
+```
+
+```
+## [1] 11101.25
+```
+
+```r
+#Diferencia
+mean(data.treat$earnings_treat)- mean(data.control$earnings_control)
+```
+
+```
+## [1] -26.25
+```
+
+]
+
+Parece que en el grupo de control ganan más (efecto de tratamiento negativo)
+]
+
+
+.pull-right[
+
+El principal problema con esta diferencia es que sabemos que los ingresos crecen con la edad
+
+Pero notemos que la muestra de no tratados tiene mayor edad promedio
+
+.tiny[
+
+```r
+mean(data.treat$age_treat)
+```
+
+```
+## [1] 24.3
+```
+
+```r
+mean(data.control$age_control)
+```
+
+```
+## [1] 31.95
+```
+
+```r
+#Diferencia
+mean(data.treat$age_treat)- mean(data.control$age_control)
+```
+
+```
+## [1] -7.65
+```
+]
+
+- Estaríamos *confundiedo* el efecto de la edad
+
+]
+
+
+---
+
+# Ejemplo: programa hipotético de empleo
+
+Construyamos la muestra apareada
+
+Para cada individuo en el grupo tratado, buscaremos uno en el de control que tenga la misma edad
+
+Decimos que esa pareja hizo *match*
+
+Por ejemplo, la primera unidad tratada, con 18 años y un ingreso de 9500 estaría emparejada con la unidad 14 del grupo de control, que tiene también 18 años y un ingreso de 9500
+
+  - Para el individuo 18 construimos su ingreso contrafactual
+
+Cuando hay varias unidades en el grupo de control que pueden ser empatadas con la de tratamiento, podemos construir el ingreso contrafactual calulando el promedio
+
+  - Del grupo de control, los individuos 10 y 18 tienen 30 años, con ingresos 10750 y 9000, por lo que usamos el promedio (9875) para crear el contrafactual
+
+---
+
+
+# Ejemplo: programa hipotético de empleo
+
+
+.pull-left[
+
+La muestra apareada o contrafactual será
+
+.tiny[
+
+```
+## # A tibble: 10 x 3
+##    unit_matched age_matched earnings_matched
+##           &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;
+##  1            1          18             8050
+##  2            2          29            10525
+##  3            3          24             9400
+##  4            4          27            10075
+##  5            5          33            11425
+##  6            6          22             8950
+##  7            7          19             8275
+##  8            8          20             8500
+##  9            9          21             8725
+## 10           10          30             9875
+```
+]
+
+Noten que la edad es la misma entre los tratados y la muestra apareada
+.tiny[
+
+```r
+mean(data.treat$age_treat)
+```
+
+```
+## [1] 24.3
+```
+
+```r
+mean(data.matched$age_matched)
+```
+
+```
+## [1] 24.3
+```
+]
+]
+
+
+.pull-right[
+
+Decimos que la edad *está balanceada*
+
+Y entonces podemos calcular el efecto de tratamiento como la diferencia de ingresos entre los tratados y la muestra apareada
+
+.tiny[
+
+```r
+#Diferencia
+mean(data.treat$earnings_treat)- mean(data.matched$earnings_matched)
+```
+
+```
+## [1] 1695
+```
+]
+
+Hay un efecto positivo del programa de 1695 unidades monetarias
+
+]
+
+---
+
+# Importancia del soporte común
+
+Observemos lo que ocurre con la distribución de edades en ambos grupos
+
+.pull-left[
+Tratados
+![](figures/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+No tratados
+![](figures/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+]
+
+El supuesto de traslape para identificar el efecto del tratamiento significa que para cada unidad tratada, hay al menos un no tratado
+
+De otra forma, no podemos hacer la comparación
+---
+
+# Ejemplo de la vida real
+
+Tenemos varias características en `\(X_i\)`, no solo la edad
+
+Esto hace que cada valor `\(X_i=x_i\)` este representado por una *celda*
+    
+`\(X_i\)` incluye, por ejemplo, raza, año de solicitud de ingreso al programa, escolaridad, calificación en examen de aptitud, año de nacimiento (son las características del ejemplo que vermeos más adelante)
+  
+Estas características definen *celdas* y dentro de cada celda tenemos tratados y no tratados
+ 
+---
+
+# Matching exacto es impráctico
+ 
+En la práctica es difícil manejar problemas en espacios de múltiples dimensiones: **maldición de la dimensionalidad**
+ 
+El problema de la maldición de la dimensionalidad se exacerba con el tamaño limitado de las bases de datos
+ 
+Si `\(X\)` tuviera solo indicadores binarios, el número de posibles combinaciones sería `\(2^s\)`
+   
+Por ejemplo, si solo tuviéramos `\(X_1=\{\text{menor de 35 años}, \text{con 35 años o más}\}\)`, `\(X_2=\{\text{más que preparatoria}, \text{menos que preparatoria}\}\)`, `\(X_3=\{\text{indígena}, \text{no indígena}\}\)`, tendríamos que hacer ocho comparaciones:
+   
+  - menor de 35 años, más que preparatoria, indígena
+  - menor de 35 años, más que preparatoria, no indígena
+  - ...
+  - con 35 años o más, menos que preparatoria, no indígena
+
+Pero Si `\(X\)` incluye muchas variables, algunas tomando muchos valores, esto se vuelve imposible de realizar
+  
+---
+
+# Maldición de la dimensionalidad
+
+El requerimiento de soporte común significa que debemos tener tratados y no tratados para cada valor de `\(X_i\)` para hacer comparaciónes
+
+Cuando `\(X_i\)` tiene muchas dimensiones, resulta un problema de *escasez* o *sparseness*
+
+Algunas celdas estarán vacías, o solo tendrán tratados, o solo tendrán no tratados
+
+---
+
+# Teorema del PS
+
+Rosenbaum y Rubin (1983) demostraron que resulta lo mismo asumir la independencia condicional sobre las `\(X\)` que asumir la independencia condicional sobre **la probabilidad de ser tratado**
+
+A esto le llamamos **inconfundibilidad dado el propensity score**
+ 
+$$
+Y(0), Y(1) \perp  D|P(X)
+$$
+ 
+donde `\(P(X)=P(D=1|X)\)` es la probabilidad de ser tratado dado un conjunto de covariables `\(X\)`, el *propensity score* o PS
+  
+---
+  
+# Estimación
+ 
+Podemos estimar el efecto del tratamiento:
+   
+$$
+\text{Efecto de tratamiento}=E_{P(X)|D=1} \left(E(Y(1)|D=1, P(X))-E(Y(0)|D=0,P(X)) \right)
+$$
+ 
+El efecto del tratamiento es la diferencia en la variable de resultados de los tratados y los no tratados pesada por la distribución del PS en los tratados
+  
+---
+
+# Estimación
+ 
+Debemos por tanto primero calcular el PS
+ 
+Luego emparejamos las unidades que fueron tratadas con unidades que no lo fueron usando el PS
+ 
+Se mide la diferencia en la variable de resultados entre estos grupos
+ 
+Se hace un promedio ponderado de las diferencias
+  
+---
+
+# Especificar el modelo del PS
+ 
+Se usa un modelo *probit* o *logit* para modelar la probabilidad de recibir el tratamiento de forma no lineal
+
+Especificamos un modelo para dicha probabilidad, que depende de las características `\(X\)`
+
+`$$\text{Propensity Score}=P(D_i=1)=F(X_i'\beta)$$`
+Este modelo se estima fácilmente en R y lo aprenderemos a hacer el viernes
+
+Las características `\(X\)` son características que afectan la probabilidad de ser tratado, pero que no se ven afectadas por el tratamiento
+
+Idealmente se introducen características que estaban fijas cuando se implementó el programa
+
+El propósito del PS es sobre todo generar balance de las variables en `\(X\)`
+    
+---
+
+# Algoritmos de matching más populares
+
+Una vez que hemos estimado el PS para cada unidad tratada y no tratada tenemos que elegir un algoritmo de emparejamiento
+
+Para cada unidad tratada, con un PS estimado dado, debemos escoger una o varias unidades no tratadas para ser su contrafactual
+
+Los algoritmos de matching nos dan reglas para asignar estos emparejamientos basadas en los valores del PS estimado
+
+---
+
+# Vecino más cercano
+ 
+A cada individuo del grupo tratado se le asigna uno del grupo de comparación en términos del PS
+ 
+Puede hacerse con remplazo o sin remplazo
+ 
+Puede emplearse también sobremuestreo (*oversampling*), es decir, asignar más de un individuo del grupo de comparación
+
+Por ejemplo NN 5 significa que a cada individuo tratado se le asignan los cinco individuos del grupo no tratado con los PS estimados más cercanos
+  
+  
+---
+
+# Vecino más cercano
+
+.pull-left[
+| Tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| a | 0.031 |
+| b | 0.042 |
+| c | 0.07 |
+| `\(\vdots\)` | `\(\vdots\)` |
+]
+
+
+.pull-rights[
+| No tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| A | 0.034 |
+| B | 0.068 |
+| C | 0.21 |
+| `\(\vdots\)` | `\(\vdots\)` |
+]
+
+
+Con vecino más cercano, el individuo `\(a\)` tratado estaría emparejado con el `\(A\)` no tratado
+
+Si el emparejamiento es con reemplazo, `\(A\)` podría ser usado otra vez
+y `\(b\)` también sería emparejado con `\(A\)`
+
+Pero si el emparejamiento es sin reemplazo, `\(A\)` ya no puede ser usado y a `\(b\)` se le emparejaría con `\(B\)`
+
+Cuando hacemos el pareamiento sin reemplazo, debemos tener una muestra lo suficientemente grande
+
+- El pareamiento sin reemplazo depende del orden en que se realice el procedimiento
+
+---
+
+# Caliper y radio
+ 
+El método de vecino más cercano puede generar malos emparejamientos si el vecino más cercano está muy lejos en términos del PS
+  
+Especificar un *caliper* consiste en definir una vecindad aceptable de matching (el caliper) y elegir solo el vecino más cercano dentro del caliper
+ 
+Con las funciones de R que usaremos más adelante, el *radio* consiste en definir cuántos individuos deberán ser apareados dado que están dentro del caliper
+  
+---
+
+# Caliper
+
+.pull-left[
+| Tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| a | 0.031 |
+| b | 0.042 |
+| c | 0.07 |
+| d | 0.11 |
+| `\(\vdots\)` | `\(\vdots\)` |
+]
+
+.pull-rights[
+| No tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| A | 0.034 |
+| B | 0.068 |
+| C | 0.21 |
+| D | 0.40 |
+| `\(\vdots\)` | `\(\vdots\)` |
+] 
+
+El primer paso es fijar el caliper, por ejemplo, de 0.1
+
+El caliper implica buscar al vecino más cercano dentro de una vecindad de 0.1
+
+En este ejemplo `\(c\)` podría ser solo emparejado con `\(B\)` si `\(B\)` aún está disponible (porque no ha sido emparejado con nadie o porque aunque haya sido emparejado, el procedimiento se hace con reemplazo)
+
+---
+
+# Caliper con sobremuestreo
+
+.pull-left[
+| Tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| d | 0.31 |
+| e | 0.39 |
+| f | 0.44 |
+| g | 0.52 |
+| h | 0.55 |
+| i | 0.62 |
+| `\(\vdots\)` | `\(\vdots\)` |
+]
+
+.pull-rights[
+| No tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| R | 0.27 |
+| S | 0.29 |
+| T | 0.33 |
+| U | 0.49 |
+| V | 0.57 |
+| W | 0.61 |
+| `\(\vdots\)` | `\(\vdots\)` |
+] 
+
+Si el caliper se realiza con sobremuestreo, con un caliper de 0.10 y 2 vecinos a `\(g\)` se le asignarían `\(U\)` y `\(V\)` (si estuvieran disponibles)
+
+Es decir, dentro del caliper, los dos individuos con el PS más cercano
+
+---
+
+# Radio
+
+.pull-left[
+| Tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| d | 0.31 |
+| e | 0.39 |
+| f | 0.44 |
+| g | 0.52 |
+| h | 0.55 |
+| i | 0.62 |
+| `\(\vdots\)` | `\(\vdots\)` |
+]
+
+.pull-rights[
+| No tratados | `\(\hat{p}\)` |
+|:---: |:---:|
+| R | 0.27 |
+| S | 0.29 |
+| T | 0.33 |
+| U | 0.49 |
+| V | 0.57 |
+| W | 0.61 |
+| `\(\vdots\)` | `\(\vdots\)` |
+] 
+
+Pero si ahora implementamos radio con un caliper de 0.10, a `\(g\)` se le asignarían `\(U\)`, `\(V\)` y `\(W\)` (si estuvieran disponibles)
+
+Es decir, todos los individuos dentro del caliper
+
+---
+
+# ¿Qué método usar?
+ 
+No hay un método claramente superior a todos los demás
+ 
+Más aún, el desempeño de cada método depende de cada aplicación
+ 
+La ruta más seguida es usar varios algoritmos y mostrar la robustez de los resultados a esta elección
+  
+---
+
+# Comprobar empíricamente los supuestos
+ 
+.pull-left[
+El efecto del tratamiento solo se calcula sobre la región de sporte común por lo que se debe verificar el traslape del PS calculado para los tratados y no tratados
+ 
+Otro de los teoremas de Rosenbaum y Rubin (1983) implica que
+
+$$
+X \perp  D|P(X)
+$$
+ 
+Esto es, que al controlar por el PS, las variables `\(X\)` no deben proveer información sobre `\(D\)`
+
+Tenemos que mostrar que en la muestra emparejada las características `\(X\)` son independientes del tratamiento
+
+]
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="figures/Gertler_PSOverlap.png" alt="Fuente: Gertler et al. (2017)" width="100%" /&gt;
+&lt;p class="caption"&gt;Fuente: Gertler et al. (2017)&lt;/p&gt;
+&lt;/div&gt;
+
+]
+
+---
+
+class: inverse, middle, center
+
+# Conclusión
+
+---
+
+# Conclusión
+
+A diferencia de los métodos experimentales, los métodos no experimentales requieren supuestos más fuertes
+
+  - Supuestos sobre las tendencias en DID
+  - Supuestos sobre la continuidad alrededor del corte en los diseños con discontinuidades
+  - Supuestos sobre la independencia condicional en los métodos de emparejamiento
+  
+Algunos de estos supuestos pueden argumentarse empíricamente
+
+Otros requieren de teoría y entendimiento de las instituciones y procedimientos para ser creíbles
+
+Deben ser bastante críticos sobre los supuestos sobre los que recaen las evaluaciones con las que trabajen
+
+Siempre se debe ser transparente y mostrar la robustez de los resultados ante distintas decisiones
+
+
+---
+
+# Próxima sesión
+
+Utilizaremos R para analizar datos experimentales
+
+Procuren instalar R y R estudio, en ese orden, de acuerdo a esta [guía](https://rojasirvin.github.io/curso_conl2021/slides/instalacion_r.html#1)
+
+Si tienen un problema, consúltenme, ya sea al final de la clase o por correo electrónico (irvin.rojas@cide.edu)
+
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
