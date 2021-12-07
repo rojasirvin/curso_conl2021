@@ -15,6 +15,8 @@ navbar:
           href: "slides/metodos_experimentales.html"
         - text: "Sesión 3"
           href: "slides/metodos_no_experimentales.html"
+        - text: "Sesión 4"
+          href: "slides//practica_metodos_experimentales.html"
         - text: "Instalación de R"
           href: "slides/instalacion_r.html"
     - icon: fab fa-github
