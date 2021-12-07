@@ -58,7 +58,12 @@ En este sitio encontrarán materiales para las cinco sesiones de Introducción a
 
 [Sesión 4](https://rojasirvin.github.io/curso_conl2021/slides/practica_metodos_experimentales.html#1). Práctica de métodos experimentales
 
+- [mi_primer_script.r](/curso_conl2021/data/mi_primer_script.r)
+
 - [marruecos_microfinanzas.csv](/curso_conl2021/data/marruecos_microfinanzas.csv)
+
+- [salarios.csv](/curso_conl2021/data/salarios.csv)
+
 
 Sesión 5. Práctica de métodos no experimentales
 
