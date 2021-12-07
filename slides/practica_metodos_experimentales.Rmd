@@ -1,0 +1,851 @@
+---
+title: "Práctica de métodos experimentales"
+author: "Irvin Rojas"
+institute: "CIDE"
+date: "24 de agosto de 2021"
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes, shadows,arrows}
+output:
+  xaringan::moon_reader:
+    css: [default, "libs/cide.css", metropolis-fonts, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css", "https://use.fontawesome.com/releases/v5.7.2/css/all.css", "https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css"]
+    seal: false
+    chakra: "https://remarkjs.com/downloads/remark-latest.min.js"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: ["middle", "center"]
+      ratio: "16:9"
+      beforeInit: ["https://platform.twitter.com/widgets.js", "libs/cols_macro.js"]
+      navigation:
+        scroll: false
+
+
+---
+class: title-slide
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.path = "figures/")
+library(tidyverse)
+library(magick)
+library(reticulate)
+library(knitr)
+library(kableExtra)
+library(broom)
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+.title[
+# Clase 4. Práctica de métodos experimentales
+]
+.subtitle[
+## Evaluación de Programas
+]
+.author[
+### Irvin Rojas <br> [rojasirvin.com](https://www.rojasirvin.com/) <br> [<i class="fab fa-github"></i>](https://github.com/rojasirvin) [<i class="fab fa-twitter"></i>](https://twitter.com/RojasIrvin) [<i class="ai ai-google-scholar"></i>](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&hl=en)
+]
+
+.affiliation[
+### Centro de Investigación y Docencia Económicas <br> División de Economía
+]
+
+---
+# Agenda
+
+1. Aprenderemos a hacer operaciones básicas en R
+
+1. Nuestro objetivo será poder leer una base de datos
+
+1. Luego aprenderemos a calcular estadísticas básicas 
+
+1. Y finalmente haremos pruebas estadísticas para aplicarlas a problemas de evaluación de impacto
+
+---
+
+class: inverse, middle, center
+
+# R desde cero
+
+---
+
+# Archivos .r o scripts
+
+Los archivos script son una colección de órdenes
+
+Vamos a crear nuestro primer script
+
+En R, desde la barra de tareas creamos un script en blanco
+
+---
+
+# Comentarios al script
+
+Es de vital importancia que sus scripts estén comentados
+
+Para insertar un comentario simplemente escriban \# y el texto que le sigue no será leido como una instrucción
+
+```{r include=T,echo=T,eval=T}
+# Esto es un comentario
+```
+
+Yo siempre escribo arriba el nombre del proyecto, la fecha, y alguna descripción
+
+Escribir código es como escribir en papel, cada quien tiene sus costumbres y la forma en que mejor se acomoda
+
+---
+
+# Objetos
+
+Un objeto es *algo* que existe en R
+
+Es buena idea familiarizarse con los nombres de los distintos objetos
+
+---
+
+# Constantes
+
+Podemos crear constantes usando la combinación de símbolos "<-"
+
+Para escribir rápidamente "<-" podemos usar el atajo Alt+(-) (es decir Alt y el símbolo de menos)
+
+Noten que las constantes creadas aparecen en el lado derecho
+
+Pueden usar combinaciones de constantes y números
+
+Los símbolos para hacer operaciones son los mismos que en cualquier otro paquete
+
+---
+
+# Constantes
+
+Para *ejecutar* las órdenes pueden seleccionar la parte que quieren ejecutar y presionar Ctrl+Enter
+
+Esto es lo mismo que seleccionar y dar click al botón Run en la barra de Menú
+
+```{r include=T,echo=T,eval=T, results=T}
+a <- 1
+
+b <- 2
+
+c <- a+b
+
+c
+```
+
+
+---
+
+# Operadores aritméticos
+
+Los símbolos de los operadores artiméticos son estándar
+
+| Símbolo | Operación |
+|:---:|:---:|
+| + | Suma |
+| - | Resta |
+| * | Producto |
+| / | División |
+| ^ | Potencia |  
+
+
+
+
+
+---
+
+# Ejercicio 1
+
+Un rectánculo tiene una base igual a 10 unidades y una altura igual a 4 unidades. Genere una constante llamada *area.rect* que indique el área del rectánculo
+
+¿Qué pasa si el rectángulo ahora tiene una altura de 5? Genere la nueva área *area.rect.2*
+
+Un círculo tiene radio de 2.6. Genere una constante *d.circ* que indique el área del círculo y otra *p.circ* que indique el perímetro
+
+---
+
+# Guardar su script
+
+Ya han acumulado varias cosas nuevas
+
+En la práctica, un script puede ser
+
+- La limpieza de un archivo de datos
+
+- El reporte de una investigación
+
+- Una serie de regresiones y predicciones
+
+Queremos guardar todas esas instrucciones para poder repetirlas, compartirlas, publicarlas y editarlas
+
+Simplemente den click en el icono del disco y encuéntrenle un lugar
+
+Lo que yo acostumbro es tener una carpeta por proyecto
+
+Tengo una subcarpeta para los datos, otra para los scripts, otra para los borradores de mi trabajo, otra para los artículos que reviso, etc.
+
+---
+
+# Directorio de trabajo
+
+El directorio de trabajo es el lugar de su disco duro donde se ubican los archivos de R
+
+Cuando leemos scripts, llamamos bases de datos, guardamos objetos, lo hacemos en el directorio de trabajo
+
+Para identificar dónde el directorio actual ejecutamos *getwd*
+
+```{r include=T,echo=T,eval=T, results=T}
+getwd()
+```
+
+Una cosa que siempre hacemos al iniciar el trabajo es seleccionar un directorio de trabajo
+
+Para establecer un directorio de trabajo usamos *setwd*
+
+```{r include=T,echo=T,eval=T, results=T}
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+```
+
+Noten que usamos "/" en lugar "\\"
+
+---
+
+# Ayuda
+
+Casi nadie se sabe cómo funcionan exactamente todas las funciones en R
+
+Lo más normal es pedir ayuda
+
+Para ver la ayuda de una función ejecutamos "?" seguido del nombre de la función
+
+Si ejecutamos *?mean* obtendremos la ayuda de la función *mean*
+
+Busquen ayuda en internet usando el nombre del paquete
+
+[Stack Overflow](https://stackoverflow.com/questions/tagged/r) es un buen sitio que organiza preguntas de usuarios y donde otros usuarios ayudan a responder
+
+Hay que saber buscar y para saber buscar debemos entender qué queremos hacer
+
+
+---
+
+# Paquetes
+
+Un paquete es un conjunto de funciones, documentación y bases de datos que realizan tareas específicas
+
+Los paquetes son una serie de archivos que se encuentran en un repositorio llamado [CRAN](https://cran.r-project.org/), The Comprehensive R Archive Network
+
+Cuando alguien crea un paquete nuevo, lo envía a CRAN para que sea validado
+
+Podemos instalar paquetes desde CRAN usando la función *install.packages*
+
+Un paquete que usaremos mucho para hacer gráficas es *tidyverse*
+
+```{r include=T,echo=T,eval=F, results=F}
+install.packages("tidyverse")
+```
+
+Instalar un paquete significa que ya lo tienen en su computadora, pero aún no está listo para usarse
+
+```{r include=T,echo=T,eval=F, results=F}
+library(tidyverse)
+```
+---
+
+# Tidyverse
+
+Muchas de las cosas que haremos en este curso se pueden realizar con una colección de paquetes incluidas en [tidyverse](https://www.tidyverse.org/)
+
+Tydiverse es una colección de paquetes para ciencia de datos que se acopla muy bien con los paquetes más usados para el análisis estadístico y la econometría
+
+Acá pueden ver la [lista de paquetes](https://www.tidyverse.org/packages/) que vienen en tidyverse
+
+---
+
+# De vuelta a los scripts
+
+Los scripts son esencialmente una colección de instrucciones guardadas como un archivo de texto con extensión .R
+
+Los podemos abrir con cualquier lector de textos, pero R los interpreta como código a ser ejectuado
+
+Les recomiendo ordernar siempre su trabajo en un script
+
+Esta es la forma en que pueden llevarlo a otras computadoras, compartirlo con sus equipos de investigación, publicarlo, someterlo a dictamente...
+
+Cada quien tiene sus reglas
+
+---
+
+class: inverse, middle, center
+
+# Los data frames
+
+---
+
+# Los data frames
+
+Los data frames son una colección de filas y columnas en donde guardamos información ordenada
+
+Nosotros nos topamos con data framses todo el tiempo, aunque a veces no están siempre ordenadas
+
+- Lista del súper
+
+- Estadísticas del fútbol
+
+- Lista de asistencia a clase
+
+- Calificaciones escolares
+
+Nosotros queremos aprender a sacarle juego a los data frames con propósitos de evaluación de impacto
+
+---
+
+# Los data frames
+
+Vamos a comenzar *leyendo* un conjunto de datos
+
+El archivo de datos proviene de algún lugar y vamos a abrirlo en R para después manipularlo
+
+Voy a leer estos datos y se los asignaré a un objeto llamado *data.morocco*
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.morocco <-read_csv("./marruecos_microfinanzas.csv")
+```
+
+La función *read_csv* nos permite leer un archivo que viene en formato .csv
+
+En R podemos leer muchos otros tipos de archivos (.dta, .xls, entre otros)
+
+Los datos que usamos provienen de un estudio realizado por [Crépon, Devoto, Duflo & Parienté (2015)](https://www.aeaweb.org/articles?id=10.1257/app.20130535) para estudiar el impacto de una intervención que aleatoriamente asigna a hogares para recibir productos de microfinanzas
+
+---
+
+# Los data frames
+
+Noten que *data.morocco* aparece ahora en el panel derecho
+
+Podemos leer algunas de sus características: tiene 4,934 observaciones y 13 columnas
+
+Es importante tener presente este lenguaje
+
+Las filas son las **observaciones** y representan, en este caso, hogares
+
+Las columnas son las **variables** y representan, en este caso, a las características de los hogares que se incluyeron en la evaluación
+
+Si le dan doble click a *data.morocco* el panel principal despliega la base de datos
+
+Si le dan click al símbolo de *play* sobre el nombre *data.morocco* verán el nombre de las columnas
+
+---
+
+# Los data frames
+
+En este caso, las columnas indican lo siguiente
+
+- **ident**: es una especie de folio individual
+- **treatment**: es el indicador binario de tratamiento
+- **expense_total**: son los gastos totales al final del experimento
+- **income_assetsales**: son los ingresos por venta de activos al final del experimento
+- **hours_outside_age6_65**: son las horas trabajadas por personas entre 6 y 65 años de edad al final del experimento
+- **hours_chores_age6_65**: son las horas dedicadas a labores del hogar por personas entre 6 y 65 años al final del experimento
+- **members_resid**: es el tamaño del hogar en la línea base
+- **nadults_resid**: es el número de adultos en el hogar en la línea base
+- **head_age**: es la edad del jefe del hogar en el línea base
+- **act_livestock**: un indicador binario de si el hogar tiene ganado en la línea base
+- **act_business**: un indicador binario de si el hogar tiene un negocio en la línea base
+- **borrowed_total**: la cantidad de endeudamiento del hogar en la línea base
+
+Es importante que noten que hay variables pre y post internvención y que en una evaluación se usan para distintos propósitos
+---
+
+# Los data frames
+
+Siempre exploren sus datos antes de empezar a trabajar con ellos
+
+Un error muy común es querer empezar a hacer análisis sin antes haber conocido los datos
+
+La función *colnames()* les muestra el nombre de las columnas (variables, para nosotros)
+
+```{r include=T,echo=T,eval=T, results=T}
+colnames(data.morocco)
+```
+
+---
+
+# Ejercicio 2
+
+Usen las siguientes funciones para explorar el data frame  *data.morocco*
+
+Escriban sobre el script que ya empezaron para que después puedan guardar su archivo, volverlo a abrir y estudiarlo
+
+¿Qué hace cada función?
+
+
+```{r include=T,echo=T,eval=F, results=F}
+head(data.morocco)
+head(data.morocco, n=10)
+tail(data.morocco)
+dim(data.morocco)
+nrow(data.morocco)
+ncol(data.morocco)
+str(data.morocco)
+```
+
+
+---
+
+class: inverse, middle, center
+
+# Estadística descriptiva
+
+
+---
+
+# Estadística descriptiva
+
+Les recomiendo que siempre describan sus datos
+
+Es importante porque les ayuda a detectar patrones antes de dedicarse a hacer cosas más complejas
+
+Ayuda a identificar posibles errores
+
+¿Qué pasaría si nos damos cuenta que en nuestros datos hay un jefe de hogar con -30 años de edad?
+
+
+---
+
+# mean()
+
+La media aritmética
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+mean(data.morocco$head_age)
+```
+
+¿Por qué pasó esto? ¿Cómo lo resolverían?
+
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+mean(data.morocco$head_age, na.rm=TRUE)
+```
+
+Noten que se valen los atajos *T* en lugar de *TRUE* y *F* en lugar de *FALSE*
+
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+mean(data.morocco$head_age, na.rm=T)
+```
+
+
+Noten el uso del símbolo "$" como la forma de referirse a una columna de cierto data frame
+
+---
+
+# sd()
+
+La desviación estándar
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+sd(data.morocco$head_age, na.rm=T)
+```
+
+Ya saben qué hacer cuando quieren asignarle el cálculo a un ofjeto
+
+```{r include=T,echo=T,eval=T, results=T, message=F}
+sd.edad <- sd(data.morocco$head_age, na.rm=T)
+
+sd.edad
+```
+
+---
+
+# Pipas para estadística descriptiva
+
+Se irán dando cuenta que hay varias formas de hacer lo mismo (calcular una media, por ejemplo)
+
+Las pipas nos ayudan a crear código que es mucho más fácil de leer
+
+No tenemos que crear objetos intermedios
+
+Las pipas nos son útiles en el cálculo de estadística descriptiva, sobre todo cuando las acompañamos de *group_by*
+
+
+```{r include=T,echo=T,eval=T, results=T, message=F, warning=F}
+data.morocco %>% 
+  group_by(treatment) %>%
+  summarize(mean=mean(head_age,na.rm=T)) %>% 
+  ungroup()
+
+
+```
+
+---
+
+# Más de una estadística
+
+En su investigación y en sus trabajos académicos muy frecuentemente presentarán tablas de estadística descriptiva
+
+```{r include=T,echo=T,eval=T, results=T, message=F, warning=F}
+tabla.desc <- data.morocco %>% 
+  group_by(treatment) %>%
+  summarise(media.edad=mean(head_age, na.rm=T),
+            de.edad=sd(head_age, na.rm=T),
+            max.edad=max(head_age, na.rm=T),
+            min.edad=min(head_age, na.rm=T),
+            obs.edad=n()) %>% 
+  ungroup()
+
+tabla.desc
+```
+
+---
+
+# Prueba de diferencia de medias
+
+.pull-left[
+Ahora sí, podemos usar nuestros datos para aplicar lo que aprendimos sobre evaluación experimental
+
+En este caso, el tratamiento fue asignado aleatoriamente, por lo que debemos comprobar que las características en la línea base son iguales entre grupos
+
+¿Cuál es la $H_0$?
+
+¿Cómo interpretamos $|t|=1.2625$?
+
+¿Cómo interpretamos $p=0.2068$?
+
+¿Rechazamos la $H_0??
+
+]
+
+.pull-right[
+```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
+t.test(head_age ~ treatment,
+       data = data.morocco)
+```
+]
+---
+
+class: inverse, middle, center
+
+# Regresión para la evaluación
+
+---
+
+# Regresión como herramienta
+
+Usaremos muy frecuentemente la regresión para la estimación de efectos causales
+
+La regresión líneal es la herramienta estadística más usada en evaluación
+
+La regresión nos servirá para hacer esencialmente lo mismo: comparación de $y_i$ entre grupos
+
+Nos permitirá *controlar* por posibles factores que afecten $y$, haciendo más precisa la estimación del efecto del tratamiento
+
+---
+
+# Regresión como herramienta
+
+.pull-left[
+Consideremos este ejemplo hipotético
+
+Existe una relación positiva entre los años de educación y el salario
+
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results=F}
+set.seed(1234)
+##Linear Regression
+#Generate the independent variable and the error
+educacion <-  rnorm(100,10,3)
+e <-  rnorm(100,0,8)
+#Generate the dependent variable (b0=150, b1=-4, b2=2.5)
+salario <- 100 + 2 * educacion + e 
+datos.salarios <- as.data.frame(cbind(salario, educacion))
+#create the model
+m1=lm(salario ~ educacion)
+summary(m1)
+```
+]
+.pull-right[
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+datos.salarios <- augment(m1)
+datos.salarios %>% 
+  ggplot(aes(x=educacion, y=salario )) +
+  geom_point()+
+  labs(x="Educación", "Salario por hora")
+```
+]
+
+---
+
+# El principio de mínimos cuadrados
+
+
+.pull-left[
+Existe una infinidad de líneas que puedo trazar intentando describir los puntos
+
+Cada línea está caracterizada por una ordenada al origen y una pendiente
+
+$$\hat{y}=\alpha+\beta X$$
+
+Esta recta describe el salario que esperaríamos dado un nivel de educación
+
+A la diferencia entre lo observado y lo ajustado le llamamos **errores**
+
+$$\hat{e}=y-\hat{y}$$
+
+
+]
+
+.pull-right[
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+datos.salarios %>% 
+  ggplot(aes(x=educacion, y=salario )) +
+  geom_point()+
+  labs(x="Educación", "Salario por hora")
+```
+]
+
+
+---
+
+# El principio de mínimos cuadrados
+
+.pull-left[
+Yo puedo acumular el total de los errores, sumando simplemente $\sum_i \hat{e}_i$ para expresar una medida de discrepancia entre mi recta y los puntos observados
+
+Pero también me gustaría hacer que los errores más grandes *pesen* más que los más errores más pequeños
+
+$$L=\sum_i \hat{e}_i$$
+Sustituyendo lo que vale $\hat{e}$ y $\hat{y}$
+
+$$L=\sum_i \hat{e}_i=\sum_i (y_i-\hat{y}_i)^2=\sum_i (y_i-\alpha-\beta X_i)^2$$
+
+
+
+
+]
+
+
+.pull-right[
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+datos.salarios %>% 
+  ggplot(aes(x=educacion, y=salario )) +
+  geom_point()+
+  labs(x="Educación", "Salario por hora")
+```
+]
+
+
+---
+
+# El principio de mínimos cuadrados
+
+.pull-left[
+El principio de MCO consiste en elegir el valor de $\alpha$ y $\beta$ que hagan $L$ lo más pequeño posible
+
+En otras palabras, escogemos $\alpha$ y $\beta$ que minimicen la suma de los errores que cometemos al ajustar la recta a los puntos, penalizando los errores más grandes
+
+A los valores de $\alpha$ y $\beta$ que minimizan la suma de los errores cuadráticos les conocemos como **estimadores de MCO**
+]
+
+
+.pull-right[
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+datos.salarios %>% 
+  ggplot(aes(x=educacion, y=salario )) +
+  geom_point()+
+  labs(x="Educación", "Salario por hora")+
+  geom_smooth(method = 'lm', se = F)+
+  geom_segment(aes(xend = educacion, yend = .fitted), color = "red", size = 0.3)
+``` 
+]
+
+---
+
+# El principio de mínimos cuadrados
+
+.pull-left[
+Los parámetros de la recta que cumplen con minimizar la suma de los errores cuadráticos pueden ser obtenidos como sigue
+
+```{r echo=T, message=FALSE, warnings=FALSE}
+reg1 <- lm(salario ~ educacion,
+           data=datos.salarios)
+
+summary(reg1)
+```
+
+
+]
+
+
+.pull-right[
+```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+datos.salarios %>% 
+  ggplot(aes(x=educacion, y=salario )) +
+  geom_point()+
+  labs(x="Educación", "Salario por hora")+
+  geom_smooth(method = 'lm', se = F)
+``` 
+]
+
+
+
+
+---
+
+# Regresión para la idenfiticación de efectos causales
+
+Con fines de simplificación, asumamos un efecto de tratamiento constante: $y_{1i}-y_{0i}=\rho$
+
+Consideremos el valor observado para un individuo 
+$$y_i=y_{0i}+(y_{1i}-y_{0i})D_i$$
+
+Sumemos y restemos $E(y_{0i})$:
+
+$$
+\begin{aligned}
+y_i&=E(y_{0i})+(y_{1i}-y_{0i})D_i+y_{0i}-E(y_{0i}) \\
+&=\underbrace{\alpha}_{E(y_{0i})}+\underbrace{\rho}_{(y_{1i}-y_{0i})} D_i + \underbrace{\nu_i}_{y_{0i}-E(y_{0i})}
+\end{aligned}
+$$
+
+Esta expresión nos indica que podemos evaluar el efecto del tratamiento con una regresión de $y$ en función del indicador de tratamiento $D$
+
+El valor estimado de $\rho$ nos da el efecto del tratamiento
+
+---
+
+# Regresión para la idenfiticación de efectos causales
+
+Ahora evaluemos la diferencia de valores esperados
+
+$$
+\begin{aligned}
+&E(y|D_i=1)=\alpha+\rho+E(\nu_i|D_i=1) \\
+&E(y|D_i=0)=\alpha+E(\nu_i|D_i=0)
+\end{aligned}
+$$
+
+
+Restando
+
+$$
+\begin{aligned}
+E(y|D_i=1)-E(y|D_i=0)&=\rho+\overbrace{E(\nu_i|D_i=1)-E(\nu_i|D_i=0)}^{\text{Sesgo de selección}}
+\end{aligned}
+$$
+
+Es decir, el sesgo de selección es igual a la correlación entre el término de error de la regresión y $D_i$
+
+Nuestro supuesto de independencia de la asignación del tratamiento implica entonces que el error de la regresión no está correlacionado con el tratamiento
+
+---
+
+# Diferencia de medias con regresión
+
+.pull-left[
+Recordemos que antes obtuvimos
+```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
+t.test(head_age ~ treatment,
+       data = data.morocco)
+```
+]
+
+
+.pull-left[
+Pero sabemos que una regresión lineal nos dará el mismo resultado
+```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
+balance.edad <- lm(head_age ~ treatment,
+       data = data.morocco)
+
+summary(balance.edad)
+```
+]
+
+---
+
+# Diferencia de medias con regresión
+
+$$
+y_i=\alpha+\rho D_i + \nu_i
+$$
+
+
+Con una regresión, el coeficiente estimado sobre la constante $\hat{\alpha}$ se puede interpretar como la media del grupo de control
+
+Y el coeficiente sobre la variable que indica si se recibió el tratamiento $\hat{\rho}$ indica las diferencias entre tratados y no tratados
+
+Noten que los valores del estadístico $t$ y del valor $p$ en ambas pruebas son idénticos, por lo que las conclusiones son las mismas
+
+---
+
+# Regresión corta y larga
+
+Con un tratamiento binario y asignado aleatoriamente, podemos estimar el efecto usando una regresión:
+
+$$y_i=\alpha+\beta D_i + u_i$$
+
+Es muy común, sin embargo, usar **controles**
+
+Si una serie de características $X$ no está correlacionada con $D_i$, se puede incluir en una versión larga de la regresión antes descrita
+
+$$y_i=\alpha+\beta D_i + X_i'\gamma + u_i$$
+
+El valor numérico de $\hat{\beta}$ en la regresión larga será muy cercano al obtenido con la regresión corta, pero se incrementa la precisión de los parámetros estimados
+
+En R, haríamos algo así
+
+```{r, echo=T, eval=F, results=F}
+lm(y ~ T + x1 + x2 + x3,
+   data = datos)
+```
+
+
+---
+# Actividad por equipos
+
+Usando los datos del experimento, cada equipo realizará lo siguiente:
+
+.pull-left[
+Realice una prueba de diferencia de medias para las siguientes variables de la línea base. ¿Se concluye que el experimento efectivamente se asignó de forma aleatoria?
+  - **members_resid**
+  - **nadults_resid**
+  - **head_age**
+  - **act_livestock**
+  - **act_business**
+  - **borrowed_total**
+]
+
+.pull-right[
+Estime el impacto del programa en una de las siguientes variables. Para hacerlo, usarán una regresión corta y una regresión larga (usando las variables de la línea base como controles). ¿Tuvo el programa un impacto en la variable de resultados?
+  - Equipo 1: **expense_total**
+  - Equipo 2: **income_assetsales**
+  - Equipo 3: **hours_chores_age6_65**
+  - Equipo 4: **hours_outside_age6_65**
+]
+
+---
+
+# Próxima sesión
+
+Implementaremos análisis de los métodos no experimentales vistos el lunes
+
+Vale la pena dar un repaso a cómo hacemos pruebas de hipótesis
+
+La herramienta que más usaremos el próximo viernes es la regresión lineal, vale la pena repasar este concepto también
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**
+
+
