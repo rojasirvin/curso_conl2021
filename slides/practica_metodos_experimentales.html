@@ -1,41 +1,23 @@
----
-title: "Práctica de métodos experimentales"
-author: "Irvin Rojas"
-institute: "CIDE"
-date: "24 de agosto de 2021"
-header-includes:
-  - \usepackage{tikz}
-  - \usetikzlibrary{shapes, shadows,arrows}
-output:
-  xaringan::moon_reader:
-    css: [default, "libs/cide.css", metropolis-fonts, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css", "https://use.fontawesome.com/releases/v5.7.2/css/all.css", "https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css"]
-    seal: false
-    chakra: "https://remarkjs.com/downloads/remark-latest.min.js"
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
-      titleSlideClass: ["middle", "center"]
-      ratio: "16:9"
-      beforeInit: ["https://platform.twitter.com/widgets.js", "libs/cols_macro.js"]
-      navigation:
-        scroll: false
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Práctica de métodos experimentales</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Irvin Rojas" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cide.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
 
-
----
 class: title-slide
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, fig.path = "figures/")
-library(tidyverse)
-library(magick)
-library(reticulate)
-library(knitr)
-library(kableExtra)
-library(broom)
-xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
-```
+
 
 .title[
 # Clase 4. Práctica de métodos experimentales
@@ -44,11 +26,11 @@ xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
 ## Evaluación de Programas
 ]
 .author[
-### Irvin Rojas <br> [rojasirvin.com](https://www.rojasirvin.com/) <br> [<i class="fab fa-github"></i>](https://github.com/rojasirvin) [<i class="fab fa-twitter"></i>](https://twitter.com/RojasIrvin) [<i class="ai ai-google-scholar"></i>](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&hl=en)
+### Irvin Rojas &lt;br&gt; [rojasirvin.com](https://www.rojasirvin.com/) &lt;br&gt; [&lt;i class="fab fa-github"&gt;&lt;/i&gt;](https://github.com/rojasirvin) [&lt;i class="fab fa-twitter"&gt;&lt;/i&gt;](https://twitter.com/RojasIrvin) [&lt;i class="ai ai-google-scholar"&gt;&lt;/i&gt;](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&amp;hl=en)
 ]
 
 .affiliation[
-### Centro de Investigación y Docencia Económicas <br> División de Economía
+### Centro de Investigación y Docencia Económicas &lt;br&gt; División de Economía
 ]
 
 ---
@@ -86,7 +68,8 @@ Es de vital importancia que sus scripts estén comentados
 
 Para insertar un comentario simplemente escriban \# y el texto que le sigue no será leido como una instrucción
 
-```{r include=T,echo=T,eval=T}
+
+```r
 # Esto es un comentario
 ```
 
@@ -106,9 +89,9 @@ Es buena idea familiarizarse con los nombres de los distintos objetos
 
 # Constantes
 
-Podemos crear constantes usando la combinación de símbolos "<-"
+Podemos crear constantes usando la combinación de símbolos "&lt;-"
 
-Para escribir rápidamente "<-" podemos usar el atajo Alt+(-) (es decir Alt y el símbolo de menos)
+Para escribir rápidamente "&lt;-" podemos usar el atajo Alt+(-) (es decir Alt y el símbolo de menos)
 
 Noten que las constantes creadas aparecen en el lado derecho
 
@@ -124,14 +107,19 @@ Para *ejecutar* las órdenes pueden seleccionar la parte que quieren ejecutar y 
 
 Esto es lo mismo que seleccionar y dar click al botón Run en la barra de Menú
 
-```{r include=T,echo=T,eval=T, results=T}
-a <- 1
 
-b <- 2
+```r
+a &lt;- 1
 
-c <- a+b
+b &lt;- 2
+
+c &lt;- a+b
 
 c
+```
+
+```
+## [1] 3
 ```
 
 
@@ -195,15 +183,21 @@ Cuando leemos scripts, llamamos bases de datos, guardamos objetos, lo hacemos en
 
 Para identificar dónde el directorio actual ejecutamos *getwd*
 
-```{r include=T,echo=T,eval=T, results=T}
+
+```r
 getwd()
+```
+
+```
+## [1] "C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/slides"
 ```
 
 Una cosa que siempre hacemos al iniciar el trabajo es seleccionar un directorio de trabajo
 
 Para establecer un directorio de trabajo usamos *setwd*
 
-```{r include=T,echo=T,eval=T, results=T}
+
+```r
 setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
 ```
 
@@ -242,13 +236,15 @@ Podemos instalar paquetes desde CRAN usando la función *install.packages*
 
 Un paquete que usaremos mucho para hacer gráficas es *tidyverse*
 
-```{r include=T,echo=T,eval=F, results=F}
+
+```r
 install.packages("tidyverse")
 ```
 
 Instalar un paquete significa que ya lo tienen en su computadora, pero aún no está listo para usarse
 
-```{r include=T,echo=T,eval=F, results=F}
+
+```r
 library(tidyverse)
 ```
 ---
@@ -309,17 +305,18 @@ El archivo de datos proviene de algún lugar y vamos a abrirlo en R para despué
 
 Voy a leer estos datos y se los asignaré a un objeto llamado *data.morocco*
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
+
+```r
 setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
 
-data.morocco <-read_csv("./marruecos_microfinanzas.csv")
+data.morocco &lt;-read_csv("./marruecos_microfinanzas.csv")
 ```
 
 La función *read_csv* nos permite leer un archivo que viene en formato .csv
 
 En R podemos leer muchos otros tipos de archivos (.dta, .xls, entre otros)
 
-Los datos que usamos provienen de un estudio realizado por [Crépon, Devoto, Duflo & Parienté (2015)](https://www.aeaweb.org/articles?id=10.1257/app.20130535) para estudiar el impacto de una intervención que aleatoriamente asigna a hogares para recibir productos de microfinanzas
+Los datos que usamos provienen de un estudio realizado por [Crépon, Devoto, Duflo &amp; Parienté (2015)](https://www.aeaweb.org/articles?id=10.1257/app.20130535) para estudiar el impacto de una intervención que aleatoriamente asigna a hogares para recibir productos de microfinanzas
 
 ---
 
@@ -369,8 +366,17 @@ Un error muy común es querer empezar a hacer análisis sin antes haber conocido
 
 La función *colnames()* les muestra el nombre de las columnas (variables, para nosotros)
 
-```{r include=T,echo=T,eval=T, results=T}
+
+```r
 colnames(data.morocco)
+```
+
+```
+##  [1] "ident"                  "expense_total"          "income_assetsales"     
+##  [4] "hours_outside_age16_65" "treatment"              "hours_outside_age6_65" 
+##  [7] "hours_chores_age6_65"   "members_resid"          "nadults_resid"         
+## [10] "head_age"               "act_livestock"          "act_business"          
+## [13] "borrowed_total"
 ```
 
 ---
@@ -384,7 +390,8 @@ Escriban sobre el script que ya empezaron para que después puedan guardar su ar
 ¿Qué hace cada función?
 
 
-```{r include=T,echo=T,eval=F, results=F}
+
+```r
 head(data.morocco)
 head(data.morocco, n=10)
 tail(data.morocco)
@@ -421,22 +428,37 @@ Ayuda a identificar posibles errores
 
 La media aritmética
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
+
+```r
 mean(data.morocco$head_age)
+```
+
+```
+## [1] NA
 ```
 
 ¿Por qué pasó esto? ¿Cómo lo resolverían?
 
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
+
+```r
 mean(data.morocco$head_age, na.rm=TRUE)
+```
+
+```
+## [1] 50.30394
 ```
 
 Noten que se valen los atajos *T* en lugar de *TRUE* y *F* en lugar de *FALSE*
 
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
+
+```r
 mean(data.morocco$head_age, na.rm=T)
+```
+
+```
+## [1] 50.30394
 ```
 
 
@@ -448,16 +470,26 @@ Noten el uso del símbolo "$" como la forma de referirse a una columna de cierto
 
 La desviación estándar
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
+
+```r
 sd(data.morocco$head_age, na.rm=T)
+```
+
+```
+## [1] 15.21759
 ```
 
 Ya saben qué hacer cuando quieren asignarle el cálculo a un ofjeto
 
-```{r include=T,echo=T,eval=T, results=T, message=F}
-sd.edad <- sd(data.morocco$head_age, na.rm=T)
+
+```r
+sd.edad &lt;- sd(data.morocco$head_age, na.rm=T)
 
 sd.edad
+```
+
+```
+## [1] 15.21759
 ```
 
 ---
@@ -473,13 +505,20 @@ No tenemos que crear objetos intermedios
 Las pipas nos son útiles en el cálculo de estadística descriptiva, sobre todo cuando las acompañamos de *group_by*
 
 
-```{r include=T,echo=T,eval=T, results=T, message=F, warning=F}
-data.morocco %>% 
-  group_by(treatment) %>%
-  summarize(mean=mean(head_age,na.rm=T)) %>% 
+
+```r
+data.morocco %&gt;% 
+  group_by(treatment) %&gt;%
+  summarize(mean=mean(head_age,na.rm=T)) %&gt;% 
   ungroup()
+```
 
-
+```
+## # A tibble: 2 x 2
+##   treatment  mean
+##       &lt;dbl&gt; &lt;dbl&gt;
+## 1         0  50.0
+## 2         1  50.6
 ```
 
 ---
@@ -488,17 +527,26 @@ data.morocco %>%
 
 En su investigación y en sus trabajos académicos muy frecuentemente presentarán tablas de estadística descriptiva
 
-```{r include=T,echo=T,eval=T, results=T, message=F, warning=F}
-tabla.desc <- data.morocco %>% 
-  group_by(treatment) %>%
+
+```r
+tabla.desc &lt;- data.morocco %&gt;% 
+  group_by(treatment) %&gt;%
   summarise(media.edad=mean(head_age, na.rm=T),
             de.edad=sd(head_age, na.rm=T),
             max.edad=max(head_age, na.rm=T),
             min.edad=min(head_age, na.rm=T),
-            obs.edad=n()) %>% 
+            obs.edad=n()) %&gt;% 
   ungroup()
 
 tabla.desc
+```
+
+```
+## # A tibble: 2 x 6
+##   treatment media.edad de.edad max.edad min.edad obs.edad
+##       &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;int&gt;
+## 1         0       50.0    15.0      120        2     2486
+## 2         1       50.6    15.4      110        3     2448
 ```
 
 ---
@@ -510,20 +558,32 @@ Ahora sí, podemos usar nuestros datos para aplicar lo que aprendimos sobre eval
 
 En este caso, el tratamiento fue asignado aleatoriamente, por lo que debemos comprobar que las características en la línea base son iguales entre grupos
 
-¿Cuál es la $H_0$?
+¿Cuál es la `\(H_0\)`?
 
-¿Cómo interpretamos $|t|=1.2625$?
+¿Cómo interpretamos `\(|t|=1.2625\)`?
 
-¿Cómo interpretamos $p=0.2068$?
+¿Cómo interpretamos `\(p=0.2068\)`?
 
 ¿Rechazamos la $H_0??
 
 ]
 
 .pull-right[
-```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
+
+```r
 t.test(head_age ~ treatment,
        data = data.morocco)
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  head_age by treatment
+## t = -1.2625, df = 3434.4, p-value = 0.2068
+## alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+## 95 percent confidence interval:
+##  -1.6713906  0.3620056
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        49.98172        50.63642
 ```
 ]
 ---
@@ -540,9 +600,9 @@ Usaremos muy frecuentemente la regresión para la estimación de efectos causale
 
 La regresión líneal es la herramienta estadística más usada en evaluación
 
-La regresión nos servirá para hacer esencialmente lo mismo: comparación de $y_i$ entre grupos
+La regresión nos servirá para hacer esencialmente lo mismo: comparación de `\(y_i\)` entre grupos
 
-Nos permitirá *controlar* por posibles factores que afecten $y$, haciendo más precisa la estimación del efecto del tratamiento
+Nos permitirá *controlar* por posibles factores que afecten `\(y\)`, haciendo más precisa la estimación del efecto del tratamiento
 
 ---
 
@@ -553,28 +613,10 @@ Consideremos este ejemplo hipotético
 
 Existe una relación positiva entre los años de educación y el salario
 
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results=F}
-set.seed(1234)
-##Linear Regression
-#Generate the independent variable and the error
-educacion <-  rnorm(100,10,3)
-e <-  rnorm(100,0,8)
-#Generate the dependent variable (b0=150, b1=-4, b2=2.5)
-salario <- 100 + 2 * educacion + e 
-datos.salarios <- as.data.frame(cbind(salario, educacion))
-#create the model
-m1=lm(salario ~ educacion)
-summary(m1)
-```
+
 ]
 .pull-right[
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-datos.salarios <- augment(m1)
-datos.salarios %>% 
-  ggplot(aes(x=educacion, y=salario )) +
-  geom_point()+
-  labs(x="Educación", "Salario por hora")
-```
+![](figures/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -587,24 +629,19 @@ Existe una infinidad de líneas que puedo trazar intentando describir los puntos
 
 Cada línea está caracterizada por una ordenada al origen y una pendiente
 
-$$\hat{y}=\alpha+\beta X$$
+`$$\hat{y}=\alpha+\beta X$$`
 
 Esta recta describe el salario que esperaríamos dado un nivel de educación
 
 A la diferencia entre lo observado y lo ajustado le llamamos **errores**
 
-$$\hat{e}=y-\hat{y}$$
+`$$\hat{e}=y-\hat{y}$$`
 
 
 ]
 
 .pull-right[
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-datos.salarios %>% 
-  ggplot(aes(x=educacion, y=salario )) +
-  geom_point()+
-  labs(x="Educación", "Salario por hora")
-```
+![](figures/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -613,14 +650,14 @@ datos.salarios %>%
 # El principio de mínimos cuadrados
 
 .pull-left[
-Yo puedo acumular el total de los errores, sumando simplemente $\sum_i \hat{e}_i$ para expresar una medida de discrepancia entre mi recta y los puntos observados
+Yo puedo acumular el total de los errores, sumando simplemente `\(\sum_i \hat{e}_i\)` para expresar una medida de discrepancia entre mi recta y los puntos observados
 
 Pero también me gustaría hacer que los errores más grandes *pesen* más que los más errores más pequeños
 
-$$L=\sum_i \hat{e}_i$$
-Sustituyendo lo que vale $\hat{e}$ y $\hat{y}$
+`$$L=\sum_i \hat{e}_i$$`
+Sustituyendo lo que vale `\(\hat{e}\)` y `\(\hat{y}\)`
 
-$$L=\sum_i \hat{e}_i=\sum_i (y_i-\hat{y}_i)^2=\sum_i (y_i-\alpha-\beta X_i)^2$$
+`$$L=\sum_i \hat{e}_i=\sum_i (y_i-\hat{y}_i)^2=\sum_i (y_i-\alpha-\beta X_i)^2$$`
 
 
 
@@ -629,12 +666,7 @@ $$L=\sum_i \hat{e}_i=\sum_i (y_i-\hat{y}_i)^2=\sum_i (y_i-\alpha-\beta X_i)^2$$
 
 
 .pull-right[
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-datos.salarios %>% 
-  ggplot(aes(x=educacion, y=salario )) +
-  geom_point()+
-  labs(x="Educación", "Salario por hora")
-```
+![](figures/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -643,23 +675,16 @@ datos.salarios %>%
 # El principio de mínimos cuadrados
 
 .pull-left[
-El principio de MCO consiste en elegir el valor de $\alpha$ y $\beta$ que hagan $L$ lo más pequeño posible
+El principio de MCO consiste en elegir el valor de `\(\alpha\)` y `\(\beta\)` que hagan `\(L\)` lo más pequeño posible
 
-En otras palabras, escogemos $\alpha$ y $\beta$ que minimicen la suma de los errores que cometemos al ajustar la recta a los puntos, penalizando los errores más grandes
+En otras palabras, escogemos `\(\alpha\)` y `\(\beta\)` que minimicen la suma de los errores que cometemos al ajustar la recta a los puntos, penalizando los errores más grandes
 
-A los valores de $\alpha$ y $\beta$ que minimizan la suma de los errores cuadráticos les conocemos como **estimadores de MCO**
+A los valores de `\(\alpha\)` y `\(\beta\)` que minimizan la suma de los errores cuadráticos les conocemos como **estimadores de MCO**
 ]
 
 
 .pull-right[
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-datos.salarios %>% 
-  ggplot(aes(x=educacion, y=salario )) +
-  geom_point()+
-  labs(x="Educación", "Salario por hora")+
-  geom_smooth(method = 'lm', se = F)+
-  geom_segment(aes(xend = educacion, yend = .fitted), color = "red", size = 0.3)
-``` 
+![](figures/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -669,11 +694,33 @@ datos.salarios %>%
 .pull-left[
 Los parámetros de la recta que cumplen con minimizar la suma de los errores cuadráticos pueden ser obtenidos como sigue
 
-```{r echo=T, message=FALSE, warnings=FALSE}
-reg1 <- lm(salario ~ educacion,
+
+```r
+reg1 &lt;- lm(salario ~ educacion,
            data=datos.salarios)
 
 summary(reg1)
+```
+
+```
+## 
+## Call:
+## lm(formula = salario ~ educacion, data = datos.salarios)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -23.0900  -4.9121   0.0189   4.6916  23.9019 
+## 
+## Coefficients:
+##             Estimate Std. Error t value             Pr(&gt;|t|)    
+## (Intercept) 100.9928     2.7646  36.530 &lt; 0.0000000000000002 ***
+## educacion     1.9304     0.2767   6.976       0.000000000361 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 8.297 on 98 degrees of freedom
+## Multiple R-squared:  0.3318,	Adjusted R-squared:  0.325 
+## F-statistic: 48.66 on 1 and 98 DF,  p-value: 0.0000000003606
 ```
 
 
@@ -681,13 +728,7 @@ summary(reg1)
 
 
 .pull-right[
-```{r echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-datos.salarios %>% 
-  ggplot(aes(x=educacion, y=salario )) +
-  geom_point()+
-  labs(x="Educación", "Salario por hora")+
-  geom_smooth(method = 'lm', se = F)
-``` 
+![](figures/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 ]
 
 
@@ -697,23 +738,23 @@ datos.salarios %>%
 
 # Regresión para la idenfiticación de efectos causales
 
-Con fines de simplificación, asumamos un efecto de tratamiento constante: $y_{1i}-y_{0i}=\rho$
+Con fines de simplificación, asumamos un efecto de tratamiento constante: `\(y_{1i}-y_{0i}=\rho\)`
 
 Consideremos el valor observado para un individuo 
-$$y_i=y_{0i}+(y_{1i}-y_{0i})D_i$$
+`$$y_i=y_{0i}+(y_{1i}-y_{0i})D_i$$`
 
-Sumemos y restemos $E(y_{0i})$:
+Sumemos y restemos `\(E(y_{0i})\)`:
 
 $$
-\begin{aligned}
-y_i&=E(y_{0i})+(y_{1i}-y_{0i})D_i+y_{0i}-E(y_{0i}) \\
-&=\underbrace{\alpha}_{E(y_{0i})}+\underbrace{\rho}_{(y_{1i}-y_{0i})} D_i + \underbrace{\nu_i}_{y_{0i}-E(y_{0i})}
-\end{aligned}
+`\begin{aligned}
+y_i&amp;=E(y_{0i})+(y_{1i}-y_{0i})D_i+y_{0i}-E(y_{0i}) \\
+&amp;=\underbrace{\alpha}_{E(y_{0i})}+\underbrace{\rho}_{(y_{1i}-y_{0i})} D_i + \underbrace{\nu_i}_{y_{0i}-E(y_{0i})}
+\end{aligned}`
 $$
 
-Esta expresión nos indica que podemos evaluar el efecto del tratamiento con una regresión de $y$ en función del indicador de tratamiento $D$
+Esta expresión nos indica que podemos evaluar el efecto del tratamiento con una regresión de `\(y\)` en función del indicador de tratamiento `\(D\)`
 
-El valor estimado de $\rho$ nos da el efecto del tratamiento
+El valor estimado de `\(\rho\)` nos da el efecto del tratamiento
 
 ---
 
@@ -722,22 +763,22 @@ El valor estimado de $\rho$ nos da el efecto del tratamiento
 Ahora evaluemos la diferencia de valores esperados
 
 $$
-\begin{aligned}
-&E(y|D_i=1)=\alpha+\rho+E(\nu_i|D_i=1) \\
-&E(y|D_i=0)=\alpha+E(\nu_i|D_i=0)
-\end{aligned}
+`\begin{aligned}
+&amp;E(y|D_i=1)=\alpha+\rho+E(\nu_i|D_i=1) \\
+&amp;E(y|D_i=0)=\alpha+E(\nu_i|D_i=0)
+\end{aligned}`
 $$
 
 
 Restando
 
 $$
-\begin{aligned}
-E(y|D_i=1)-E(y|D_i=0)&=\rho+\overbrace{E(\nu_i|D_i=1)-E(\nu_i|D_i=0)}^{\text{Sesgo de selección}}
-\end{aligned}
+`\begin{aligned}
+E(y|D_i=1)-E(y|D_i=0)&amp;=\rho+\overbrace{E(\nu_i|D_i=1)-E(\nu_i|D_i=0)}^{\text{Sesgo de selección}}
+\end{aligned}`
 $$
 
-Es decir, el sesgo de selección es igual a la correlación entre el término de error de la regresión y $D_i$
+Es decir, el sesgo de selección es igual a la correlación entre el término de error de la regresión y `\(D_i\)`
 
 Nuestro supuesto de independencia de la asignación del tratamiento implica entonces que el error de la regresión no está correlacionado con el tratamiento
 
@@ -747,20 +788,52 @@ Nuestro supuesto de independencia de la asignación del tratamiento implica ento
 
 .pull-left[
 Recordemos que antes obtuvimos
-```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
+
+```r
 t.test(head_age ~ treatment,
        data = data.morocco)
+## 
+## 	Welch Two Sample t-test
+## 
+## data:  head_age by treatment
+## t = -1.2625, df = 3434.4, p-value = 0.2068
+## alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+## 95 percent confidence interval:
+##  -1.6713906  0.3620056
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        49.98172        50.63642
 ```
 ]
 
 
 .pull-left[
 Pero sabemos que una regresión lineal nos dará el mismo resultado
-```{r include=T,echo=T,eval=T, results=T, message=F, warning=F, collapse=T}
-balance.edad <- lm(head_age ~ treatment,
+
+```r
+balance.edad &lt;- lm(head_age ~ treatment,
        data = data.morocco)
 
 summary(balance.edad)
+## 
+## Call:
+## lm(formula = head_age ~ treatment, data = data.morocco)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -47.982 -11.982  -1.636  10.018  70.018 
+## 
+## Coefficients:
+##             Estimate Std. Error t value            Pr(&gt;|t|)    
+## (Intercept)  49.9817     0.3636 137.450 &lt;0.0000000000000002 ***
+## treatment     0.6547     0.5183   1.263               0.207    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 15.22 on 3446 degrees of freedom
+##   (1486 observations deleted due to missingness)
+## Multiple R-squared:  0.0004627,	Adjusted R-squared:  0.0001727 
+## F-statistic: 1.595 on 1 and 3446 DF,  p-value: 0.2066
 ```
 ]
 
@@ -773,11 +846,11 @@ y_i=\alpha+\rho D_i + \nu_i
 $$
 
 
-Con una regresión, el coeficiente estimado sobre la constante $\hat{\alpha}$ se puede interpretar como la media del grupo de control
+Con una regresión, el coeficiente estimado sobre la constante `\(\hat{\alpha}\)` se puede interpretar como la media del grupo de control
 
-Y el coeficiente sobre la variable que indica si se recibió el tratamiento $\hat{\rho}$ indica las diferencias entre tratados y no tratados
+Y el coeficiente sobre la variable que indica si se recibió el tratamiento `\(\hat{\rho}\)` indica las diferencias entre tratados y no tratados
 
-Noten que los valores del estadístico $t$ y del valor $p$ en ambas pruebas son idénticos, por lo que las conclusiones son las mismas
+Noten que los valores del estadístico `\(t\)` y del valor `\(p\)` en ambas pruebas son idénticos, por lo que las conclusiones son las mismas
 
 ---
 
@@ -785,19 +858,20 @@ Noten que los valores del estadístico $t$ y del valor $p$ en ambas pruebas son 
 
 Con un tratamiento binario y asignado aleatoriamente, podemos estimar el efecto usando una regresión:
 
-$$y_i=\alpha+\beta D_i + u_i$$
+`$$y_i=\alpha+\beta D_i + u_i$$`
 
 Es muy común, sin embargo, usar **controles**
 
-Si una serie de características $X$ no está correlacionada con $D_i$, se puede incluir en una versión larga de la regresión antes descrita
+Si una serie de características `\(X\)` no está correlacionada con `\(D_i\)`, se puede incluir en una versión larga de la regresión antes descrita
 
-$$y_i=\alpha+\beta D_i + X_i'\gamma + u_i$$
+`$$y_i=\alpha+\beta D_i + X_i'\gamma + u_i$$`
 
-El valor numérico de $\hat{\beta}$ en la regresión larga será muy cercano al obtenido con la regresión corta, pero se incrementa la precisión de los parámetros estimados
+El valor numérico de `\(\hat{\beta}\)` en la regresión larga será muy cercano al obtenido con la regresión corta, pero se incrementa la precisión de los parámetros estimados
 
 En R, haríamos algo así
 
-```{r, echo=T, eval=F, results=F}
+
+```r
 lm(y ~ T + x1 + x2 + x3,
    data = datos)
 ```
@@ -849,3 +923,132 @@ Material de clase en versión preliminar.
 **No reproducir, no distribuir, no citar.**
 
 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
