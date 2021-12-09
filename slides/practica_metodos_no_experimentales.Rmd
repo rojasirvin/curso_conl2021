@@ -1,0 +1,563 @@
+---
+title: "Práctica de métodos no experimentales"
+author: "Irvin Rojas"
+institute: "CIDE"
+header-includes:
+  - \usepackage{tikz}
+  - \usetikzlibrary{shapes, shadows,arrows}
+output:
+  xaringan::moon_reader:
+    css: [default, "libs/cide.css", metropolis-fonts, "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css", "https://use.fontawesome.com/releases/v5.7.2/css/all.css", "https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css"]
+    seal: false
+    chakra: "https://remarkjs.com/downloads/remark-latest.min.js"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: ["middle", "center"]
+      ratio: "16:9"
+      beforeInit: ["https://platform.twitter.com/widgets.js", "libs/cols_macro.js"]
+      navigation:
+        scroll: false
+
+
+---
+class: title-slide
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, fig.path = "figures/")
+library(tidyverse)
+library(magick)
+library(reticulate)
+library(knitr)
+library(kableExtra)
+library(broom)
+library(MatchIt)
+library(Zelig)
+library(janitor)
+library(rdrobust)
+xfun::pkg_load2(c('base64enc', 'htmltools', 'mime'))
+```
+
+.title[
+# Clase 5. Práctica de métodos no experimentales
+]
+.subtitle[
+## Evaluación de Programas
+]
+.author[
+### Irvin Rojas <br> [rojasirvin.com](https://www.rojasirvin.com/) <br> [<i class="fab fa-github"></i>](https://github.com/rojasirvin) [<i class="fab fa-twitter"></i>](https://twitter.com/RojasIrvin) [<i class="ai ai-google-scholar"></i>](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&hl=en)
+]
+
+.affiliation[
+### Centro de Investigación y Docencia Económicas <br> División de Economía
+]
+
+---
+# Agenda
+
+Usaremos nuestros conocimientos sobre métodos no experimentales en dos aplicaciones 
+
+En ambas notaremos que usamos la regresión como herramienta para la estimación del tamaño de los efectos
+
+Recordemos que la regresión por sí sola no resuelve el problema de identificación del efecto causal, es el diseño del estudio lo que nos permite sentar las bases para la estimación de dichos efectos
+
+---
+
+class: inverse, middle, center
+
+# Diseños con discontinuidades
+
+---
+
+# Un programa de combate a la pobreza
+
+Se tienen datos de 2,810 municipios de cierto país
+
+La variable **mort_age59_related_postHS** indica la mortalidad infantil en cada municipio
+
+Un programa otorgó fondos de su componente de salud a todos los municipios con un índice de pobreza superior a 59.1968
+
+La variable **povrate60** es el índice de pobreza para cada municipio
+
+Se desea estimar el efecto del programa en la mortalidad infantil empleando un diseño de regresión discontinua
+
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+Usaremos el paquete *rdrobust*
+
+Recuerden que antes de usar un paquete debemos instalarlo y llamarlo
+
+¿Cuáles eran las funciones para instalar y llamar paquetes?
+
+Construyamos el gráfico correspondiente
+
+```{r echo=T, eval=T, message=F, warning=F}
+
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.hs <- read_csv("./datos_pobreza.csv")
+x0 <- 59.1968
+```
+]
+
+.pull-right[
+```{r echo=F, eval=T, message=F, warning=F}
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 1))
+```
+]
+
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+
+Especificamos el eje $y$: la mortalidad
+
+Especificamos el eje $x$: el índice de pobreza
+
+Especificamos el límite de elegibilidad $x_0$
+
+*nbins* es el número de puntos a graficar
+
+*p* es el orden del polinomio
+
+
+
+```{r echo=T, eval=F, message=F, warning=F}
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 1))
+```
+
+]
+
+.pull-right[
+```{r echo=F, eval=T}
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 1))
+```
+]
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+
+Podemos cambiar el orden del polinomio para permitir no linealidades
+
+Un polinomio de orden dos significa que estimamos un modelo del tipo
+
+$$y_i=\alpha + \tau pobre_i + \beta_1 indice_i + \beta_2 indice_i^2+\varepsilon_i$$
+
+Recuerden que $\tau$ es una medida del salto en el valor esperado
+
+
+```{r echo=T, eval=F, message=F, warning=F}
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 2))
+```
+
+]
+
+.pull-right[
+```{r echo=F, eval=T}
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 2))
+```
+]
+
+
+---
+
+# Estimación paramétrica
+
+
+La estimación paramétrica nos permite cuantificar el tamaño del salto y calcular su error estándar
+
+Con nuestros datos, vamos a crear una nueva variable
+
+La variable *ispoor* será 1 si el municipio es pobre y 0 si no lo es
+
+Noten como usamos *mutate* para añadir una columna
+
+Usamos *ifelse* para condicionar el valor de la nueva columna **ispoor**
+
+
+```{r echo=T, eval=T, message=F, warning=F}
+data.hs <- data.hs %>% 
+  mutate(ispoor=ifelse(povrate60>=x0,1,0))
+```
+
+Recuerden que tenemos que decidir qué tan cerca del corte $x_0$ vamos a centrar el análisis: el ancho de ventana
+
+```{r echo=T, eval=T, message=F, warning=F}
+b <- 10
+```
+
+
+
+---
+
+# Estimación paramétrica
+
+.pull-left[
+
+Estimaremos entonces el siguiente modelo usando una regresión lineal
+
+$$y_i=\alpha + \tau pobre_i + \beta_1 indice_i + \beta_2 +\varepsilon_i$$
+
+Usamos *lm*, como aprendimos antes con el análisis experimental
+
+```{r echo=T, eval=F, message=F, warning=F}
+summary(lm(mort_age59_related_postHS ~ povrate60 + ispoor,
+           data=filter(data.hs,
+                       povrate60>=x0-b & povrate60<=x0+b)))
+
+```
+
+¿Cómo interpretamos el coeficiente sobre *ispoor*?
+
+]
+
+
+
+.pull-right[
+```{r echo=F, eval=T, message=F, warning=F}
+summary(lm(mort_age59_related_postHS ~ povrate60 + ispoor,
+           data=filter(data.hs, povrate60>=x0-b & povrate60<=x0+b)))
+
+```
+]
+
+---
+
+# Validación de los supuestos
+
+.pull-left[
+El supuesto clave en el diseño con discontinuidades es que en la vecindad del corte de elegibilidad es como si hubiéramos tenido un experimento
+
+Entonces, el resto de características de los municipios no deberían variar alrededor de $x_0$
+
+Podemos mostrar esto gráficamente
+
+```{r echo=T, eval=F, message=F, warning=F}
+#Población: census1960_pop
+(rdplot(y = data.hs$census1960_pop,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 3))
+```
+
+]
+
+
+.pull-right[
+```{r echo=F, eval=T, message=F, warning=F}
+#Población: census1960_pop
+(rdplot(y = data.hs$census1960_pop,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 3))
+```
+]
+
+---
+
+# Ejercicio 1
+
+Estimemos ahora el modelo con discontinuidades con una ventana de
+  - 15 puntos
+  - 5 puntos
+
+Ahora agreguemos un polinomio de orden 3 y una ventana de 10 puntos a la estimación paramétrica
+
+¿Cómo verificaríamos paramétricamente que la población de los municipios efectivamente no cambia de forma discontinua en el corte de elegibilidad?
+
+---
+
+# Conclusión sobre diseños con discontinuidades
+ 
+RD nítida se usa cuando el tratamiento es una función determinística de una variable $x$
+
+A diferencia de los modelos de regresión o de pareamiento, no hay valor de $x_i$ en el que observemos a individuos tratados y no tratados
+ 
+La interpretación del efecto estimado por RD es un efecto local en la vecindad de $x_0$, donde podemos tener confianza que los individuos tratados y no tratados son similares en todas las dimensiones excepto en su posición respecto a $x_0$
+ 
+Una especificación flexible permite no confundir una discontinuidad con una no linealidad
+
+
+---
+
+class: inverse, middle, center
+
+# PSM
+
+---
+
+# Efecto de fumar en el peso de bebés
+ 
+Usamos los datos en *cattaneo_smoking.csv* (Cattaneo, 2010)
+ 
+Crearemos la variable de tratamiento **smoke** que es un indicador de si la madre fumó durante el embarazo
+ 
+El 19% de los mujeres reportaron fumar
+ 
+Usaremos un subconjunto de las $X$ disponibles para modelar el PS
+
+---
+
+# Creamos nuevas variables
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.smoking <- read_csv("./datos_peso.csv") %>% 
+  mutate(smoke=ifelse(mbsmoke=="smoker",1,0)) %>% 
+  mutate(married=ifelse(mmarried=="married",1,0)) %>% 
+  mutate(firstbaby=ifelse(fbaby=="Yes",1,0))
+
+```
+
+---
+
+# Diferencias simples
+
+Notemos que, si solo comparamos a las mujeres que fuman con las que no fuman, estamos comparando personas muy diferentes
+
+La función *zelig* nos permite hacer lo mismo que *lm* y algunas cosas más
+
+```{r echo=T, include=T, eval=F, message=F, warning=F}
+
+zelig(bweight ~ smoke, model="ls", data=data.smoking)
+
+zelig(married ~ smoke, model="ls", data=data.smoking)
+
+zelig(medu ~ smoke, model="ls", data=data.smoking)
+
+
+```
+
+---
+
+# Efectuamos el matching
+
+Necesitamos instalar y cargar el paquete *MatchIt* (noten las mayúsculas)
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+m.out <- matchit(formula=smoke ~ married + firstbaby + medu + nprenatal + foreign + mhisp + fage,
+                 method = "nearest",
+                 ratio = 1,
+                 distance= "logit",
+                 replace = FALSE,
+                 data = data.smoking)
+
+```
+
+El resumen del procedimiento da bastante información sobre el pareamiento:
+
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=F}
+summary(m.out)
+```
+
+
+---
+
+# Gráfico del traslape
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "jitter")
+```
+
+
+---
+
+# Histograma
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "hist")
+```
+
+---
+
+# Muestra emparejada
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+m.data <- match.data(m.out)
+
+#Esta matriz nos dice quién es el match de quién
+head(m.out$match.matrix)
+```
+
+---
+
+# Efecto de tratamiento
+
+.tiny[
+.pull-left[
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
+z.out <- zelig(bweight~smoke,
+               data = m.data,
+               model = "ls")
+```
+]
+]
+
+.tiny[
+.pull-right[
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
+z.out
+```
+]
+]
+
+
+---
+
+# Caliper
+.tiny[
+.pull-left[
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=F}
+m.out <- matchit(formula=smoke ~ married + firstbaby + medu + nprenatal + foreign + mhisp + fage,
+                 method = "nearest",
+                 distance= "logit",
+                 replace = FALSE,
+                 ratio = 2,
+                 caliper = .1,
+                 data = data.smoking)
+```
+]
+]
+
+.tiny[
+.pull-right[
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
+zelig(bweight~smoke,
+               data = match.data(m.out),
+               model = "ls")
+```
+]
+]
+
+
+---
+
+# Gráfico del traslape
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "jitter")
+```
+
+
+---
+
+# Histograma
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "hist")
+```
+
+---
+
+# Muestra emparejada
+
+```{r echo=T, include=T, eval=T, message=F, warning=F}
+m.data <- match.data(m.out)
+
+#Esta matriz nos dice quién es el match de quién
+head(m.out$match.matrix)
+```
+
+---
+
+# Efecto de tratamiento
+
+.tiny[
+.pull-left[
+```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
+z.out <- zelig(bweight~smoke,
+               data = m.data,
+               model = "ls")
+
+z.out
+```
+]
+]
+
+---
+
+# Ejercicio 2
+
+Estimemos el efecto de tratamiento usando PSM con las siguientes modificaciones
+
+- Incluya el cuadrado de la edad del padre **fage** y la educación de la madre *medu*
+
+- Use un ratio de 0.15
+
+- Use tres vecinos dentro del caliper
+
+---
+
+# Conclusión
+
+Las técnicas de PSM dependen de varios supuestos téoricos fuertes
+
+La implementación implica que las variables en $X$ son aquellas que permiten hacer los supuestos de inconfundibilidad dado el PS
+
+En la estimación del PS se toma la decisión sobre la forma funcional
+
+Los efectos de tratamiento pueden ser distintos entre diferentes algoritmos de emparejamiento y la especificación del PS
+
+La crítica más importante es que la mayoría de las veces nos preocupa más la autoselección basada en no observables que en observables
+
+Pero muchas veces es todo lo que tenemos a la mano
+
+Hay que hacer análisis de sensibilidad a las distintas decisiones
+
+Presentar resultados transparentes
+
+
+---
+
+# Conclusión del módulo
+
+BREVE CONCLUSIÓN
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**
+
+

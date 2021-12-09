@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Práctica de métodos no experimentales</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Irvin Rojas" />
+    <script src="libs/header-attrs-2.11/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="libs/cide.css" type="text/css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap-grid.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.rawgit.com/jpswalsh/academicons/master/css/academicons.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+class: title-slide
+
+
+
+.title[
+# Clase 5. Práctica de métodos no experimentales
+]
+.subtitle[
+## Evaluación de Programas
+]
+.author[
+### Irvin Rojas &lt;br&gt; [rojasirvin.com](https://www.rojasirvin.com/) &lt;br&gt; [&lt;i class="fab fa-github"&gt;&lt;/i&gt;](https://github.com/rojasirvin) [&lt;i class="fab fa-twitter"&gt;&lt;/i&gt;](https://twitter.com/RojasIrvin) [&lt;i class="ai ai-google-scholar"&gt;&lt;/i&gt;](https://scholar.google.com/citations?user=FUwdSTMAAAAJ&amp;hl=en)
+]
+
+.affiliation[
+### Centro de Investigación y Docencia Económicas &lt;br&gt; División de Economía
+]
+
+---
+# Agenda
+
+Usaremos nuestros conocimientos sobre métodos no experimentales en dos aplicaciones 
+
+En ambas notaremos que usamos la regresión como herramienta para la estimación del tamaño de los efectos
+
+Recordemos que la regresión por sí sola no resuelve el problema de identificación del efecto causal, es el diseño del estudio lo que nos permite sentar las bases para la estimación de dichos efectos
+
+---
+
+class: inverse, middle, center
+
+# Diseños con discontinuidades
+
+---
+
+# Un programa de combate a la pobreza
+
+Se tienen datos de 2,810 municipios de cierto país
+
+La variable **mort_age59_related_postHS** indica la mortalidad infantil en cada municipio
+
+Un programa otorgó fondos de su componente de salud a todos los municipios con un índice de pobreza superior a 59.1968
+
+La variable **povrate60** es el índice de pobreza para cada municipio
+
+Se desea estimar el efecto del programa en la mortalidad infantil empleando un diseño de regresión discontinua
+
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+Usaremos el paquete *rdrobust*
+
+Recuerden que antes de usar un paquete debemos instalarlo y llamarlo
+
+¿Cuáles eran las funciones para instalar y llamar paquetes?
+
+Construyamos el gráfico correspondiente
+
+
+```r
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.hs &lt;- read_csv("./datos_pobreza.csv")
+x0 &lt;- 59.1968
+```
+]
+
+.pull-right[
+![](figures/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
+```
+## Call: rdplot
+## 
+## Number of Obs.                 2783
+## Kernel                      Uniform
+## 
+## Number of Obs.                 2489             294
+## Eff. Number of Obs.            2489             294
+## Order poly. fit (p)               1               1
+## BW poly. fit (h)             43.988          22.373
+## Number of bins scale          1.000           1.000
+```
+]
+
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+
+Especificamos el eje `\(y\)`: la mortalidad
+
+Especificamos el eje `\(x\)`: el índice de pobreza
+
+Especificamos el límite de elegibilidad `\(x_0\)`
+
+*nbins* es el número de puntos a graficar
+
+*p* es el orden del polinomio
+
+
+
+
+```r
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 1))
+```
+
+]
+
+.pull-right[
+![](figures/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+```
+## Call: rdplot
+## 
+## Number of Obs.                 2783
+## Kernel                      Uniform
+## 
+## Number of Obs.                 2489             294
+## Eff. Number of Obs.            2489             294
+## Order poly. fit (p)               1               1
+## BW poly. fit (h)             43.988          22.373
+## Number of bins scale          1.000           1.000
+```
+]
+
+---
+
+# Evidencia gráfica
+
+.pull-left[
+
+Podemos cambiar el orden del polinomio para permitir no linealidades
+
+Un polinomio de orden dos significa que estimamos un modelo del tipo
+
+`$$y_i=\alpha + \tau pobre_i + \beta_1 indice_i + \beta_2 indice_i^2+\varepsilon_i$$`
+
+Recuerden que `\(\tau\)` es una medida del salto en el valor esperado
+
+
+
+```r
+(rdplot(y = data.hs$mort_age59_related_postHS,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 2))
+```
+
+]
+
+.pull-right[
+![](figures/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+```
+## Call: rdplot
+## 
+## Number of Obs.                 2783
+## Kernel                      Uniform
+## 
+## Number of Obs.                 2489             294
+## Eff. Number of Obs.            2489             294
+## Order poly. fit (p)               2               2
+## BW poly. fit (h)             43.988          22.373
+## Number of bins scale          1.000           1.000
+```
+]
+
+
+---
+
+# Estimación paramétrica
+
+
+La estimación paramétrica nos permite cuantificar el tamaño del salto y calcular su error estándar
+
+Con nuestros datos, vamos a crear una nueva variable
+
+La variable *ispoor* será 1 si el municipio es pobre y 0 si no lo es
+
+Noten como usamos *mutate* para añadir una columna
+
+Usamos *ifelse* para condicionar el valor de la nueva columna **ispoor**
+
+
+
+```r
+data.hs &lt;- data.hs %&gt;% 
+  mutate(ispoor=ifelse(povrate60&gt;=x0,1,0))
+```
+
+Recuerden que tenemos que decidir qué tan cerca del corte `\(x_0\)` vamos a centrar el análisis: el ancho de ventana
+
+
+```r
+b &lt;- 10
+```
+
+
+
+---
+
+# Estimación paramétrica
+
+.pull-left[
+
+Estimaremos entonces el siguiente modelo usando una regresión lineal
+
+`$$y_i=\alpha + \tau pobre_i + \beta_1 indice_i + \beta_2 +\varepsilon_i$$`
+
+Usamos *lm*, como aprendimos antes con el análisis experimental
+
+
+```r
+summary(lm(mort_age59_related_postHS ~ povrate60 + ispoor,
+           data=filter(data.hs,
+                       povrate60&gt;=x0-b &amp; povrate60&lt;=x0+b)))
+```
+
+¿Cómo interpretamos el coeficiente sobre *ispoor*?
+
+]
+
+
+
+.pull-right[
+
+```
+## 
+## Call:
+## lm(formula = mort_age59_related_postHS ~ povrate60 + ispoor, 
+##     data = filter(data.hs, povrate60 &gt;= x0 - b &amp; povrate60 &lt;= 
+##         x0 + b))
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -3.479 -2.905 -2.331  1.774 61.686 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -1.63212    4.43998  -0.368   0.7133  
+## povrate60    0.08643    0.08188   1.056   0.2916  
+## ispoor      -1.53264    0.89167  -1.719   0.0862 .
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 5.409 on 568 degrees of freedom
+##   (4 observations deleted due to missingness)
+## Multiple R-squared:  0.006279,	Adjusted R-squared:  0.00278 
+## F-statistic: 1.795 on 2 and 568 DF,  p-value: 0.1671
+```
+]
+
+---
+
+# Validación de los supuestos
+
+.pull-left[
+El supuesto clave en el diseño con discontinuidades es que en la vecindad del corte de elegibilidad es como si hubiéramos tenido un experimento
+
+Entonces, el resto de características de los municipios no deberían variar alrededor de `\(x_0\)`
+
+Podemos mostrar esto gráficamente
+
+
+```r
+#Población: census1960_pop
+(rdplot(y = data.hs$census1960_pop,
+        x = data.hs$povrate60,
+        c = x0,
+        nbins = 40,
+        p = 3))
+```
+
+]
+
+
+.pull-right[
+![](figures/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+```
+## Call: rdplot
+## 
+## Number of Obs.                 2804
+## Kernel                      Uniform
+## 
+## Number of Obs.                 2504             300
+## Eff. Number of Obs.            2504             300
+## Order poly. fit (p)               3               3
+## BW poly. fit (h)             43.988          33.875
+## Number of bins scale          1.000           1.000
+```
+]
+
+---
+
+# Ejercicio 1
+
+Estimemos ahora el modelo con discontinuidades con una ventana de
+  - 15 puntos
+  - 5 puntos
+
+Ahora agreguemos un polinomio de orden 3 y una ventana de 10 puntos a la estimación paramétrica
+
+¿Cómo verificaríamos paramétricamente que la población de los municipios efectivamente no cambia de forma discontinua en el corte de elegibilidad?
+
+
+
+---
+
+class: inverse, middle, center
+
+# PSM
+
+---
+
+# Efecto de fumar en el peso de bebés
+ 
+Usamos los datos en *cattaneo_smoking.csv* (Cattaneo, 2010)
+ 
+Crearemos la variable de tratamiento **smoke** que es un indicador de si la madre fumó durante el embarazo
+ 
+El 19% de los mujeres reportaron fumar
+ 
+Usaremos un subconjunto de las `\(X\)` disponibles para modelar el PS
+
+---
+
+# Creamos nuevas variables
+
+
+```r
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.smoking &lt;- read_csv("./datos_peso.csv") %&gt;% 
+  mutate(smoke=ifelse(mbsmoke=="smoker",1,0)) %&gt;% 
+  mutate(married=ifelse(mmarried=="married",1,0)) %&gt;% 
+  mutate(firstbaby=ifelse(fbaby=="Yes",1,0))
+```
+
+---
+
+# Diferencias simples
+
+Notemos que, si solo comparamos a las mujeres que fuman con las que no fuman, estamos comparando personas muy diferentes
+
+La función *zelig* nos permite hacer lo mismo que *lm* y algunas cosas más
+
+
+```r
+zelig(bweight ~ smoke, model="ls", data=data.smoking)
+
+zelig(married ~ smoke, model="ls", data=data.smoking)
+
+zelig(medu ~ smoke, model="ls", data=data.smoking)
+```
+
+---
+
+# Efectuamos el matching
+
+Necesitamos instalar y cargar el paquete *MatchIt* (noten las mayúsculas)
+
+
+```r
+m.out &lt;- matchit(formula=smoke ~ married + firstbaby + medu + nprenatal + foreign + mhisp + fage,
+                 method = "nearest",
+                 ratio = 1,
+                 distance= "logit",
+                 replace = FALSE,
+                 data = data.smoking)
+```
+
+El resumen del procedimiento da bastante información sobre el pareamiento:
+
+
+```r
+summary(m.out)
+```
+
+
+---
+
+# Gráfico del traslape
+
+
+```r
+plot(m.out, type = "jitter")
+```
+
+![](figures/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+```
+## [1] "To identify the units, use first mouse button; to stop, use second."
+```
+
+```
+## integer(0)
+```
+
+
+---
+
+# Histograma
+
+
+```r
+plot(m.out, type = "hist")
+```
+
+![](figures/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+
+# Muestra emparejada
+
+
+```r
+m.data &lt;- match.data(m.out)
+
+#Esta matriz nos dice quién es el match de quién
+head(m.out$match.matrix)
+```
+
+```
+##    [,1]  
+## 11 "4130"
+## 20 "2234"
+## 25 "1740"
+## 43 "2857"
+## 47 "305" 
+## 49 "1442"
+```
+
+---
+
+# Efecto de tratamiento
+
+.tiny[
+.pull-left[
+
+```r
+z.out &lt;- zelig(bweight~smoke,
+               data = m.data,
+               model = "ls")
+```
+
+```
+## How to cite this model in Zelig:
+##   R Core Team. 2007.
+##   ls: Least Squares Regression for Continuous Dependent Variables
+##   in Christine Choirat, Christopher Gandrud, James Honaker, Kosuke Imai, Gary King, and Olivia Lau,
+##   "Zelig: Everyone's Statistical Software," https://zeligproject.org/
+```
+]
+]
+
+.tiny[
+.pull-right[
+
+```r
+z.out
+```
+
+```
+## Model: 
+## 
+## Call:
+## z5$zelig(formula = bweight ~ smoke, data = m.data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2740.66  -330.66    41.95   381.95  1880.34 
+## 
+## Coefficients:
+##             Estimate Std. Error t value             Pr(&gt;|t|)
+## (Intercept)  3332.05      20.37 163.588 &lt; 0.0000000000000002
+## smoke        -194.39      28.81  -6.749      0.0000000000203
+## 
+## Residual standard error: 598.7 on 1726 degrees of freedom
+## Multiple R-squared:  0.02571,	Adjusted R-squared:  0.02514 
+## F-statistic: 45.54 on 1 and 1726 DF,  p-value: 0.00000000002033
+## 
+## Next step: Use 'setx' method
+```
+]
+]
+
+
+---
+
+# Caliper
+.tiny[
+.pull-left[
+
+```r
+m.out &lt;- matchit(formula=smoke ~ married + firstbaby + medu + nprenatal + foreign + mhisp + fage,
+                 method = "nearest",
+                 distance= "logit",
+                 replace = FALSE,
+                 ratio = 2,
+                 caliper = .1,
+                 data = data.smoking)
+```
+]
+]
+
+.tiny[
+.pull-right[
+
+```r
+zelig(bweight~smoke,
+               data = match.data(m.out),
+               model = "ls")
+```
+
+```
+## How to cite this model in Zelig:
+##   R Core Team. 2007.
+##   ls: Least Squares Regression for Continuous Dependent Variables
+##   in Christine Choirat, Christopher Gandrud, James Honaker, Kosuke Imai, Gary King, and Olivia Lau,
+##   "Zelig: Everyone's Statistical Software," https://zeligproject.org/
+```
+
+```
+## Model: 
+## 
+## Call:
+## z5$zelig(formula = bweight ~ smoke, data = match.data(m.out))
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2907.56  -328.56    38.44   387.76  1880.76 
+## 
+## Coefficients:
+##             Estimate Std. Error t value            Pr(&gt;|t|)
+## (Intercept)  3361.56      14.94 225.048 &lt;0.0000000000000002
+## smoke        -224.31      25.21  -8.899 &lt;0.0000000000000002
+## 
+## Residual standard error: 596.2 on 2453 degrees of freedom
+## Multiple R-squared:  0.03127,	Adjusted R-squared:  0.03088 
+## F-statistic: 79.18 on 1 and 2453 DF,  p-value: &lt; 0.00000000000000022
+## 
+## Next step: Use 'setx' method
+```
+]
+]
+
+
+---
+
+# Gráfico del traslape
+
+
+```r
+plot(m.out, type = "jitter")
+```
+
+![](figures/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+```
+## [1] "To identify the units, use first mouse button; to stop, use second."
+```
+
+```
+## integer(0)
+```
+
+
+---
+
+# Histograma
+
+
+```r
+plot(m.out, type = "hist")
+```
+
+![](figures/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+
+# Muestra emparejada
+
+
+```r
+m.data &lt;- match.data(m.out)
+
+#Esta matriz nos dice quién es el match de quién
+head(m.out$match.matrix)
+```
+
+```
+##    [,1]   [,2]  
+## 11 "4130" "2791"
+## 20 "2234" NA    
+## 25 "1740" "2259"
+## 43 "2857" "1822"
+## 47 "305"  "3931"
+## 49 "1442" "4306"
+```
+
+---
+
+# Efecto de tratamiento
+
+.tiny[
+.pull-left[
+
+```r
+z.out &lt;- zelig(bweight~smoke,
+               data = m.data,
+               model = "ls")
+```
+
+```
+## How to cite this model in Zelig:
+##   R Core Team. 2007.
+##   ls: Least Squares Regression for Continuous Dependent Variables
+##   in Christine Choirat, Christopher Gandrud, James Honaker, Kosuke Imai, Gary King, and Olivia Lau,
+##   "Zelig: Everyone's Statistical Software," https://zeligproject.org/
+```
+
+```r
+z.out
+```
+
+```
+## Model: 
+## 
+## Call:
+## z5$zelig(formula = bweight ~ smoke, data = m.data)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2907.56  -328.56    38.44   387.76  1880.76 
+## 
+## Coefficients:
+##             Estimate Std. Error t value            Pr(&gt;|t|)
+## (Intercept)  3361.56      14.94 225.048 &lt;0.0000000000000002
+## smoke        -224.31      25.21  -8.899 &lt;0.0000000000000002
+## 
+## Residual standard error: 596.2 on 2453 degrees of freedom
+## Multiple R-squared:  0.03127,	Adjusted R-squared:  0.03088 
+## F-statistic: 79.18 on 1 and 2453 DF,  p-value: &lt; 0.00000000000000022
+## 
+## Next step: Use 'setx' method
+```
+]
+]
+
+---
+
+# Ejercicio 2
+
+Estimemos el efecto de tratamiento usando PSM con las siguientes modificaciones
+
+- Incluya el cuadrado de la edad del padre **fage** y la educación de la madre *medu*
+
+- Use un ratio de 0.15
+
+- Use tres vecinos dentro del caliper
+
+---
+
+# Conclusión
+
+Las técnicas de PSM dependen de varios supuestos téoricos fuertes
+
+La implementación implica que las variables en `\(X\)` son aquellas que permiten hacer los supuestos de inconfundibilidad dado el PS
+
+En la estimación del PS se toma la decisión sobre la forma funcional
+
+Los efectos de tratamiento pueden ser distintos entre diferentes algoritmos de emparejamiento y la especificación del PS
+
+La crítica más importante es que la mayoría de las veces nos preocupa más la autoselección basada en no observables que en observables
+
+Pero muchas veces es todo lo que tenemos a la mano
+
+Hay que hacer análisis de sensibilidad a las distintas decisiones
+
+Presentar resultados transparentes
+
+
+---
+
+# Conclusión del módulo
+
+BREVE CONCLUSIÓN
+
+---
+
+class: center, middle
+
+Presentación creada usando el paquete [**xaringan**](https://github.com/yihui/xaringan) en R.
+
+El *chakra* viene de [remark.js](https://remarkjs.com), [**knitr**](http://yihui.org/knitr), y [R Markdown](https://rmarkdown.rstudio.com).
+
+Material de clase en versión preliminar.
+
+**No reproducir, no distribuir, no citar.**
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script src="libs/cols_macro.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9",
+"navigation": {
+"scroll": false
+}
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

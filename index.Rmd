@@ -64,9 +64,13 @@ En este sitio encontrarán materiales para las cinco sesiones de Introducción a
 
 - [salarios.csv](/curso_conl2021/data/salarios.csv)
 
+[Sesión 5](https://rojasirvin.github.io/curso_conl2021/slides/practica_metodos_no_experimentales.html#1). Práctica de métodos no experimentales
 
-Sesión 5. Práctica de métodos no experimentales
+- [mi_segundo_script.R](/curso_conl2021/data/mi_segundo_script.R)
 
+- [datos_pobreza.csv](/curso_conl2021/data/datos_pobreza.csv)
+
+- [datos_peso.csv](/curso_conl2021/data/datos_peso.csv)
 
 # Software
 
