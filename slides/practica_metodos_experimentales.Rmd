@@ -828,6 +828,24 @@ Estime el impacto del programa en una de las siguientes variables. Para hacerlo,
 
 ---
 
+# Checklist
+
+En un diseño experimental pongamos atención en:
+
+**Supuesto clave**: la asignación del tratamiento es independiente de las características de las unidades
+
+1. En un diseño experimental el evaluador genera grupos estadísticamente iguales a los que se asigna a distintos *brazos* de tratamiento
+
+1. Se colectan datos de línea base y datos al final del experimento
+
+1. En la línea base se debe verificar que las características de las unidades son estadísticamente iguales entre grupos
+
+1. Al final del experimento se estima el efecto del tratamiento comparando las medias de las variables de resultados entre grupos
+
+1. Típicamente usamos regresión en la estimación de los efectos, *controlando* por características observadas en la línea base
+
+---
+
 # Próxima sesión
 
 Implementaremos análisis de los métodos no experimentales vistos el lunes

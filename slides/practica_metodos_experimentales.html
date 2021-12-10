@@ -712,15 +712,15 @@ summary(reg1)
 ## -23.0900  -4.9121   0.0189   4.6916  23.9019 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value             Pr(&gt;|t|)    
-## (Intercept) 100.9928     2.7646  36.530 &lt; 0.0000000000000002 ***
-## educacion     1.9304     0.2767   6.976       0.000000000361 ***
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 100.9928     2.7646  36.530  &lt; 2e-16 ***
+## educacion     1.9304     0.2767   6.976 3.61e-10 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 8.297 on 98 degrees of freedom
 ## Multiple R-squared:  0.3318,	Adjusted R-squared:  0.325 
-## F-statistic: 48.66 on 1 and 98 DF,  p-value: 0.0000000003606
+## F-statistic: 48.66 on 1 and 98 DF,  p-value: 3.606e-10
 ```
 
 
@@ -824,9 +824,9 @@ summary(balance.edad)
 ## -47.982 -11.982  -1.636  10.018  70.018 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value            Pr(&gt;|t|)    
-## (Intercept)  49.9817     0.3636 137.450 &lt;0.0000000000000002 ***
-## treatment     0.6547     0.5183   1.263               0.207    
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  49.9817     0.3636 137.450   &lt;2e-16 ***
+## treatment     0.6547     0.5183   1.263    0.207    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
@@ -899,6 +899,24 @@ Estime el impacto del programa en una de las siguientes variables. Para hacerlo,
   - Equipo 3: **hours_chores_age6_65**
   - Equipo 4: **hours_outside_age6_65**
 ]
+
+---
+
+# Checklist
+
+En un diseño experimental pongamos atención en:
+
+**Supuesto clave**: la asignación del tratamiento es independiente de las características de las unidades
+
+1. En un diseño experimental el evaluador genera grupos estadísticamente iguales a los que se asigna a distintos *brazos* de tratamiento
+
+1. Se colectan datos de línea base y datos al final del experimento
+
+1. En la línea base se debe verificar que las características de las unidades son estadísticamente iguales entre grupos
+
+1. Al final del experimento se estima el efecto del tratamiento comparando las medias de las variables de resultados entre grupos
+
+1. Típicamente usamos regresión en la estimación de los efectos, *controlando* por características observadas en la línea base
 
 ---
 
