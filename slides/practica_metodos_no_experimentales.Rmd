@@ -71,17 +71,67 @@ class: inverse, middle, center
 
 ---
 
+# Discontinuidades nítidas
+ 
+Explotamos el hecho de que el tratamiento es una función determinística de una variable $x$
+
+
+$$
+D_i =
+\begin{cases}
+1  & \mbox{if } x_i \geq x_0 \\
+0  & \mbox{if } x_i < x_0
+\end{cases}
+$$
+
+
+$x_0$ es el *umbral* o *corte*
+
+$D_i$ es una función determinística de $x_i$ pues una vez que conocemos $x_i$ entonces conocemos $D_i$
+
+A diferencia de los modelos de regresión o de pareamiento, no hay valor de $x_i$ en el que observemos a individuos tratados y no tratados
+ 
+La interpretación del efecto estimado por RD es un efecto local en la vecindad de $x_0$, donde podemos tener confianza que los individuos tratados y no tratados son similares en todas las dimensiones excepto en su posición respecto a $x_0$
+ 
+Una especificación flexible permite no confundir una discontinuidad con una no linealidad
+
+---
+
 # Un programa de combate a la pobreza
 
-Se tienen datos de 2,810 municipios de cierto país
-
-La variable **mort_age59_related_postHS** indica la mortalidad infantil en cada municipio
+El archivo *datos_pobreza.csv* contiene datos de 2,810 municipios de cierto país
 
 Un programa otorgó fondos de su componente de salud a todos los municipios con un índice de pobreza superior a 59.1968
+
+```{r echo=T, eval=T, message=F, warning=F}
+
+setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
+
+data.hs <- read_csv("./datos_pobreza.csv")
+x0 <- 59.1968
+```
+
+La variable **mort_age59_related_postHS** indica la mortalidad infantil en cada municipio
 
 La variable **povrate60** es el índice de pobreza para cada municipio
 
 Se desea estimar el efecto del programa en la mortalidad infantil empleando un diseño de regresión discontinua
+
+---
+
+# Variables
+
+Algunas de las variables que usaremos son
+
+**mort_age59_related_postHS** la mortalidad en niños de 5 a 9 años
+
+**povrate60** el porcentaje de la población que vive en pobreza en el municipio
+
+**census1960_pop** la población del municipio
+
+**census1960_pcturban** el porcentaje de la población urbana
+
+**census1960_pctblack** el porcentaje de la población de raza negra
 
 
 ---
@@ -97,13 +147,6 @@ Recuerden que antes de usar un paquete debemos instalarlo y llamarlo
 
 Construyamos el gráfico correspondiente
 
-```{r echo=T, eval=T, message=F, warning=F}
-
-setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
-
-data.hs <- read_csv("./datos_pobreza.csv")
-x0 <- 59.1968
-```
 ]
 
 .pull-right[
@@ -301,15 +344,23 @@ Ahora agreguemos un polinomio de orden 3 y una ventana de 10 puntos a la estimac
 
 ---
 
-# Conclusión sobre diseños con discontinuidades
- 
-RD nítida se usa cuando el tratamiento es una función determinística de una variable $x$
+# Checklist
 
-A diferencia de los modelos de regresión o de pareamiento, no hay valor de $x_i$ en el que observemos a individuos tratados y no tratados
- 
-La interpretación del efecto estimado por RD es un efecto local en la vecindad de $x_0$, donde podemos tener confianza que los individuos tratados y no tratados son similares en todas las dimensiones excepto en su posición respecto a $x_0$
- 
-Una especificación flexible permite no confundir una discontinuidad con una no linealidad
+En un diseño con discontinuidades pongamos atención en:
+
+**Supuesto clave**: las características de las unidades varían de forma suave a través del corte
+
+1. Identificar el corte de elegibilidad
+  - No debe ser manipulable
+  - Las unidades no pueden elegir su posición
+  
+1. Verificar gráficamente la presencia de una discontinuidad
+  - Permitir no linealidades
+  
+1. Estimar el efecto paramétricamente usando regresión
+  - Juzgar la magnitud y significancia estadística
+  
+1. Verificar que las características observables de las unidades no varía de manera discontinua
 
 
 ---
@@ -317,6 +368,23 @@ Una especificación flexible permite no confundir una discontinuidad con una no 
 class: inverse, middle, center
 
 # PSM
+
+---
+
+# Propensity Score Matching
+
+Las técnicas de PSM dependen de varios supuestos estadísticos fuertes
+
+Asumimos que el tratamiento es independiente de $y$ condicional en las variables observables usadas para estimar el PS
+
+Debemos estimar el PS, la probabilidad de ser tratado dado $X$
+
+Debemos escoger un algoritmo de emparejamiento para consruir el contrafactual
+
+La crítica más importante es que la mayoría de las veces nos preocupa más la autoselección basada en no observables que en observables
+
+Hay que hacer análisis de sensibilidad a las distintas decisiones
+
 
 ---
 
@@ -334,6 +402,10 @@ Usaremos un subconjunto de las $X$ disponibles para modelar el PS
 
 # Creamos nuevas variables
 
+.pull-left[
+
+Usemos los datos que están en el archivo *data_peso.csv*
+
 ```{r echo=T, include=T, eval=T, message=F, warning=F}
 setwd("C:/Users/rojas/Dropbox/presentations_sites/curso_conl2021/data")
 
@@ -343,6 +415,40 @@ data.smoking <- read_csv("./datos_peso.csv") %>%
   mutate(firstbaby=ifelse(fbaby=="Yes",1,0))
 
 ```
+]
+
+.pull-right[
+*mutate* indica que vamos a modificar el data frame que tenemos a la mano
+
+*ifelse* indica la condición que se debe cumplir para darle un valor a la nueva variable
+
+*ifesle* requiere tres argumentos: la condición, el valor si la condición se cumple y el valor si no se cumple
+
+]
+
+---
+
+# Variables
+
+Algunas variables usa usaremos son
+
+**smoke** indica si la madre fumó o no durante el embarazo
+
+**bweight** peso del bebé al nacer
+
+**married** indicador de casada
+
+**firstbaby** indicador de primer bebé
+
+**medu** educación de la madre
+
+**nprenatal** visitas de cuidado prenatal
+
+**foreign** si la madre nació en el extrnajero
+
+**mhisp** si la madre es hispana
+
+**fage** edad del padre
 
 ---
 
@@ -359,13 +465,100 @@ zelig(bweight ~ smoke, model="ls", data=data.smoking)
 zelig(married ~ smoke, model="ls", data=data.smoking)
 
 zelig(medu ~ smoke, model="ls", data=data.smoking)
-
-
 ```
 
 ---
 
+# Breve introducción a modelos variable dependiente binaria
+
+$y_i$ toma el valor de 1 si el evento se realiza y 0 si no
+
+$$
+y_i=
+\begin{cases}
+1 \quad\text{con probabilidad }p \\
+0 \quad\text{con probabilidad }1-p
+\end{cases}
+$$
+Le damos un modelo a $p_i$ con una serie de características $x_i$
+
+A diferencia de la regresión lineal, aquí especificamos un modelo no lineal porque queremos que la probabilidad estimada quede acotada entre 0 y 1
+
+$$p_i=F(y_i=1|x_i)=F(x_i'\beta)$$
+
+La forma que escojamos para $F(\cdot)$ da lugar a los dos modelos más usados: probit y logit
+
+---
+
+# Estimación del PS
+
+.pull-left[
+En PSM usamos modelos de probabilidad para estimar el PS, la probabiliad de ser tratado, en función de una serie de características observables
+
+Podemos visualizar la probabilidad de fumar en función de la edad
+
+Vemos que los modelos probit y logit dan resultados muy parecidos en términos de probabilidad ajustada
+
+Para la estimación del PS usaremos varias características para obtener la probabilidad ajustada de haber fumado
+
+
+```{r echo=F, eval=T, message=F, warning=F}
+
+mlogit <- glm(smoke ~ medu,
+              family = binomial(link = "logit"),
+              data = data.smoking)
+
+mprobit <- glm(smoke ~ medu,
+              family = binomial(link = "probit"),
+              data = data.smoking)
+
+mlineal <- lm(smoke ~ medu,
+              data = data.smoking)
+
+
+#Predicciones con cada modelo
+
+plogit <- mlogit %>%
+  predict(data=data.smoking, type = "response")
+
+pprobit <- mprobit %>%
+  predict(data=data.smoking, type = "response")
+
+plineal <- mlineal %>%
+  predict(data=data.smoking, type = "response")
+
+#Colecciono las variables que usaré
+data_for_plot <- data.frame(medu=data.smoking$medu,
+                            plogit,
+                            pprobit,
+                            plineal)
+
+#Arreglo en formato long (lo usaremos más en panel)
+data_for_plot <- pivot_longer(data_for_plot,
+                              cols= c("plogit","pprobit","plineal"),
+                              names_to="Modelo",
+                              values_to = "prob")
+```
+]
+
+.pull-right[
+```{r echo=F, eval=T, message=F, warning=F}
+#Construyo la gráfica
+ggplot(data=data_for_plot)+
+  geom_line(aes(x=medu, y=prob, color=Modelo))+
+  geom_point(data=data.smoking, aes(x=medu, y=smoke))
+
+```
+]
+
+
+
+---
+
+
 # Efectuamos el matching
+
+.pull-left[
 
 Necesitamos instalar y cargar el paquete *MatchIt* (noten las mayúsculas)
 
@@ -384,28 +577,75 @@ El resumen del procedimiento da bastante información sobre el pareamiento:
 ```{r echo=T, include=T, eval=T, message=F, warning=F, results=F}
 summary(m.out)
 ```
+]
+
+.pull-right[
+*formula* indica el modelo del PS
+
+*method* indica el algoritmo de emparejamiento a usar
+
+*ratio* indica el número de vecinos
+
+*distance* indica si usamos logit o probit para estimar el PS
+
+*replace* indica si hacemos el emparejamiento con o sin remplazo
+
+*data* indica el data frame a usar
+
+]
 
 
 ---
 
 # Gráfico del traslape
 
-```{r echo=T, include=T, eval=T, message=F, warning=F}
+.pull-left[
+```{r echo=T, eval=F, message=F, warning=F}
 plot(m.out, type = "jitter")
 ```
+
+Cada punto es una observación
+
+El eje $x$ es el PS estimado
+
+Nos permite observar el rango estimado de PS y las zonas donde tenemos tratados y no tratados
+]
+
+.pull-right[
+```{r echo=F, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "jitter")
+```
+]
 
 
 ---
 
 # Histograma
 
-```{r echo=T, include=T, eval=T, message=F, warning=F}
+.pull-left[
+```{r echo=T, eval=F, message=F, warning=F}
 plot(m.out, type = "hist")
 ```
+
+Un histograma es un gráfico que nos indica cuántas observaciones hay para cada nivel de PS
+
+Noten que la primera columna nos dice la distribución del PS en la muestra sin emparejar
+
+La segunda columna nos da la distribución después del emparejamiento
+
+]
+
+.pull-right[
+```{r echo=F, include=T, eval=T, message=F, warning=F}
+plot(m.out, type = "hist")
+```
+]
 
 ---
 
 # Muestra emparejada
+
+El objeto *m.out* contiene toda la información del procedimiento de emparejamiento
 
 ```{r echo=T, include=T, eval=T, message=F, warning=F}
 m.data <- match.data(m.out)
@@ -414,17 +654,42 @@ m.data <- match.data(m.out)
 head(m.out$match.matrix)
 ```
 
+
+---
+
+# Muestra emparejada
+
+Si ejecutamos lo siguiente, obtendremos un resumen
+
+Pongamos atención al balance de los covariables
+
+```{r echo=T, eval=F, message=F, warning=F}
+summary(m.out)
+```
+
+Una regla de dedo para decir que tenemos un buen balance de los covariables en la muestra emparejada es que la diferencia de la media estandarizada (*Std. Mean Diff.*) sea menor que 0.1
+
 ---
 
 # Efecto de tratamiento
 
 .tiny[
 .pull-left[
-```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
+Ya que tenemos una muestra donde las características son iguales entre grupos, podemos hacer una comparación entre tratados y no tratados
+
+La función *zelig* lee los objetos generados por el procedimiento de emparejamiento
+
+```{r echo=T, eval=F, message=F, warning=F}
 z.out <- zelig(bweight~smoke,
                data = m.data,
                model = "ls")
 ```
+```{r echo=F, eval=T, message=F, warning=F, include=F}
+z.out <- zelig(bweight~smoke,
+               data = m.data,
+               model = "ls")
+```
+¿Cómo interpretamos la magnitud y la significancia estadística del efecto estimado?
 ]
 ]
 
@@ -442,6 +707,7 @@ z.out
 # Caliper
 .tiny[
 .pull-left[
+Pasemos ahora a estimar el efecto usando un caliper de 0.1 y dos vecinos
 ```{r echo=T, include=T, eval=T, message=F, warning=F, results=F}
 m.out <- matchit(formula=smoke ~ married + firstbaby + medu + nprenatal + foreign + mhisp + fage,
                  method = "nearest",
@@ -464,27 +730,13 @@ zelig(bweight~smoke,
 ]
 ]
 
-
----
-
-# Gráfico del traslape
-
-```{r echo=T, include=T, eval=T, message=F, warning=F}
-plot(m.out, type = "jitter")
-```
-
-
----
-
-# Histograma
-
-```{r echo=T, include=T, eval=T, message=F, warning=F}
-plot(m.out, type = "hist")
-```
-
 ---
 
 # Muestra emparejada
+
+Noten que en la muestra emparejada ahora tenemos dos individuos para cada tratado
+
+En algunos casos no hubo dos emparejados porque no había nadie dentro del caliper
 
 ```{r echo=T, include=T, eval=T, message=F, warning=F}
 m.data <- match.data(m.out)
@@ -495,58 +747,61 @@ head(m.out$match.matrix)
 
 ---
 
-# Efecto de tratamiento
-
-.tiny[
-.pull-left[
-```{r echo=T, include=T, eval=T, message=F, warning=F, results=T}
-z.out <- zelig(bweight~smoke,
-               data = m.data,
-               model = "ls")
-
-z.out
-```
-]
-]
-
----
-
 # Ejercicio 2
 
 Estimemos el efecto de tratamiento usando PSM con las siguientes modificaciones
 
 - Incluya el cuadrado de la edad del padre **fage** y la educación de la madre *medu*
 
-- Use un ratio de 0.15
+- Use un caliper de 0.15
 
 - Use tres vecinos dentro del caliper
 
 ---
 
-# Conclusión
+# Checklist
 
-Las técnicas de PSM dependen de varios supuestos téoricos fuertes
+En un diseño con PSM pongamos atención en:
 
-La implementación implica que las variables en $X$ son aquellas que permiten hacer los supuestos de inconfundibilidad dado el PS
+**Supuesto clave**: condicional en las características **observables** de las unidades, el tratamiento es independiente de la variable de resultados
 
-En la estimación del PS se toma la decisión sobre la forma funcional
+1. Determinar el conjunto de variables que se usarán para estimar el PS
+  - No deben de haber sido afectadas por el tratamiento
 
-Los efectos de tratamiento pueden ser distintos entre diferentes algoritmos de emparejamiento y la especificación del PS
+1. Estimar el PS usando logit o probit
 
-La crítica más importante es que la mayoría de las veces nos preocupa más la autoselección basada en no observables que en observables
+1. Usar un algoritmo de emparejamiento
 
-Pero muchas veces es todo lo que tenemos a la mano
+1. Verificar la propiedad de balance
+  - La función principal del PS es construir una muestra emparejada balanceada
+  
+1. Estimar el efecto de tratamiento en la muestra emparejada
 
-Hay que hacer análisis de sensibilidad a las distintas decisiones
-
-Presentar resultados transparentes
-
+1. Mostrar la robustez de los resultados
+  - Distintas especificaciones del PS
+  - Distintos algoritmos de emparejamiento
 
 ---
 
 # Conclusión del módulo
 
-BREVE CONCLUSIÓN
+En este módulo cubrimos conceptos de evaluación experimental y no experimental
+
+Enfatizamos que una evaluación se sostiene en tres pilares
+  - Pregunta motivada en la teoría
+  - Diseño apropiado para el contexto
+  - Herramientas estadísticas
+  
+Debemos poner atención a los supuestos que sostienen una estrategia de evaluación
+
+Los métodos experimentales requieren menos supuestos, pero tienen varias desventajas
+
+Los métodos no experimentales requieren más supuestos, pero a veces son las únicas alternativas factibles
+
+Las evaluaciones deben ser lo más transparentes posibles, mostrando la robustez a todas las decisiones tomadas
+
+Debemos ser críticos no solo con los efectos estimados y su significancia estadística, sino con la credibilidad de los supuestos asumidos
+
 
 ---
 
