@@ -11,7 +11,7 @@
         }
       ],
       "contents": "\r\n\r\nContents\r\nBienvenidos\r\nDiapositivas\r\nSoftware\r\nNotas\r\n\r\n\r\n\r\n\r\nBienvenidos\r\nEn este sitio encontrarán materiales para las cinco sesiones de Introducción a la Evaluación de Impacto, que forman parte del Diplomado en Evaluación organizado por CLEAR - Consejo Nuevo León 2021.\r\nDiapositivas\r\nSesión 1. Introducción a la evaluación de impacto\r\nSesión 2. Métodos experimentales\r\nSesión 3 . Métodos no experimentales\r\nSesión 4. Práctica de métodos experimentales\r\nmi_primer_script.R\r\nmarruecos_microfinanzas.csv\r\nsalarios.csv\r\nSesión 5. Práctica de métodos no experimentales\r\nmi_segundo_script.R\r\ndatos_pobreza.csv\r\ndatos_peso.csv\r\nSoftware\r\nPara las sesiones 4 y 5 usaremos R. Aquí tengo unas diapositivas explicando cómo instalarlo.\r\nNotas\r\nAlgunas notas aquí.\r\n\r\n\r\n\r\n",
-      "last_modified": "2022-01-20T18:19:10-06:00"
+      "last_modified": "2022-01-20T18:23:53-06:00"
     }
   ],
   "collections": []
