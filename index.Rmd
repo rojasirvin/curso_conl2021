@@ -1,9 +1,10 @@
 ---
-title: "Introducción a la Evaluación de Impacto"
+title: "Introducción a la Evaluación de Impacto" ## Título en cuerpo
 author: 
 - name: Irvin Rojas
   url: https://www.rojasirvin.com/
   affiliation: CIDE
+## Subtítulo en cuerpo
 description: |
   Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021
 site: distill::distill_website

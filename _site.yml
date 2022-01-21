@@ -1,12 +1,13 @@
 name: "evaluacion-impacto"
-title: "1 Introducción a la Evaluación de Impacto"
+title: "Introducción a la Evaluación de Impacto" # Título en cintillo
+#description no aparece en página
 description: |
-  2 Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021
+  Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021
 output_dir: "."
 theme: theme.css
 navbar:
   right:
-    - text: "3 Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021"
+    - text: "Diplomado en Metodologías de Evaluación CLEAR - Consejo Nuevo León 2021" ## Subtítulo en cintillo
     - text: "Diapositivas"
       menu:
         - text: "Sesión 1"
@@ -22,9 +23,9 @@ navbar:
         - text: "Instalación de R"
           href: "slides/instalacion_r.html"
     - icon: fab fa-github
-      href: https://github.com/rojasirvin/curso_conl2021
+      href: https://github.com/rojasirvin/curso_conl2021 #url de repo para cintillo
 creative_commons: CC BY-SA
-repository_url: https://github.com/rojasirvin/curso_conl2021
+repository_url: https://github.com/rojasirvin/curso_conl2021  #url de repo para footnote
 output:
   distill::distill_article:
     toc: true
